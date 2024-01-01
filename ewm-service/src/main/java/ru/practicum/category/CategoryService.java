@@ -1,10 +1,14 @@
 package ru.practicum.category;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.exceptions.ResourceConflictException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -18,6 +22,16 @@ public class CategoryService {
     // Получить все категории
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    public List<CategoryDto> getCategories(int from, int size) {
+        int pageNumber = from / size; // расчет номера страницы
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        Page<Category> page = categoryRepository.findAll(pageable);
+
+        return page.getContent().stream()
+                .map(cat -> new CategoryDto(cat.getId(), cat.getName()))
+                .collect(Collectors.toList());
     }
 
     // Получить категорию по id

@@ -18,7 +18,7 @@ public class EventMapper {
         dto.setTitle(event.getTitle());
         dto.setPaid(event.getPaid());
         dto.setCategory(categoryDto);
-        dto.setUser(userDto);
+        dto.setInitiator(userDto);
 
         return dto;
     }

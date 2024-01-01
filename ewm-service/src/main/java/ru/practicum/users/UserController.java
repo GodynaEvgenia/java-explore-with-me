@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.exceptions.ResourceConflictException;
 
 import java.util.List;
 
@@ -37,8 +38,12 @@ public class UserController {
     // Добавить пользователя (возвращаем 201 при успешном создании)
     @PostMapping
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-        User createdUser = userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        try {
+            User createdUser = userService.addUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        } catch (ResourceConflictException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(user);
+        }
     }
 
     // Удалить пользователя по id

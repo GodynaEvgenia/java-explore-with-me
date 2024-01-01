@@ -21,6 +21,7 @@ import ru.practicum.users.UserRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,9 +42,9 @@ public class EventService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Event addEvent(Long userId, NewEventDto dto) {
+    public EventDto addEvent(Long userId, NewEventDto dto) {
         Event event = mapper.newEventDtoToEntity(dto, userId);
-        return eventRepository.save(event);
+        return toDto(eventRepository.save(event));
     }
 
     public List<EventDto> getEventsByUser(Long userId, int from, int size) {
@@ -65,13 +66,20 @@ public class EventService {
 
         Category category = categoryRepository.findById(event.getCategoryId()).get();
         User user = userRepository.findById(event.getId()).get();
+        dto.setId(event.getId());
+        dto.setDescription(event.getDescription());
         dto.setAnnotation(event.getAnnotation());
         dto.setEventDate(event.getEventDate()/*.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))*/);
         dto.setTitle(event.getTitle());
         dto.setPaid(event.getPaid());
+        dto.setParticipantLimit(event.getParticipantLimit());
         dto.setCategory(new CategoryDto(category.getId(), category.getName()));
-        dto.setUser(new UserDto(user.getId(), user.getName()));
-
+        dto.setInitiator(new UserDto(user.getId(), user.getName()));
+        LocationDto locationDto = new LocationDto();
+        locationDto.setLat(event.getLocationLat());
+        locationDto.setLon(event.getLocationLon());
+        dto.setLocation(locationDto);
+        dto.setState(event.getState());
         return dto;
     }
 
@@ -89,7 +97,8 @@ public class EventService {
         dto.setConfirmedRequests(0);//TODO
         dto.setCreatedOn(event.getCreatedOn().toString());
         dto.setDescription(event.getDescription());
-        dto.setEventDate(event.getEventDate().toString());
+        //dto.setEventDate(event.getEventDate().toString());
+        dto.setEventDate(event.getEventDate());
         dto.setPaid(event.getPaid());
         dto.setParticipantLimit(event.getParticipantLimit());
         if (event.getPublishedOn() != null) {
@@ -193,7 +202,8 @@ public class EventService {
 
     public List<EventFullDto> getEvents(List<Long> users, List<String> states, List<Long> categories,
                                         String rangeStartStr, String rangeEndStr, Integer from, Integer size) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        //DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime rangeStart = null;
         LocalDateTime rangeEnd = null;
         // try {
@@ -209,6 +219,39 @@ public class EventService {
 
         List<Event> events = eventRepository.findEventsByFilters(users, states, categories, rangeStart, rangeEnd, from, size);
         return events.stream().map(this::convertToFullDto).collect(Collectors.toList());
+    }
+
+    public EventFullDto getPublishedEventDetails(Long eventId) {
+        // ищем опубликованное событие по id
+        Optional<Event> eventOpt = eventRepository.findByIdAndState(eventId, Status.PUBLISHED);
+        if (eventOpt.isEmpty()) {
+            throw new EntityNotFoundException("Event not found");
+        }
+        Event event = eventOpt.get();
+
+        // собираем просмотры и подтвержденные запросы
+      //  long views = statisticsService.getEventViews(eventId);
+      //  long confirmedRequests = statisticsService.getConfirmedRequestsCount(eventId);
+
+        // сохраняем факт обращения к статистике
+     //   statisticsService.recordRequest(eventId);
+
+        // возвращаем DTO
+      /*  return new EventFullDto(
+                event.getId(),
+                event.getAnnotation(),
+                event.getDescription(),
+                event.getEventDate(),
+                event.getLocationLat(),
+                event.getLocationLon(),
+                event.getPaid(),
+                event.getParticipantLimit(),
+                event.getTitle(),
+                event.getState(),
+               // views,
+              //  confirmedRequests
+        );*/
+        return convertToFullDto(event);
     }
 
 }

@@ -28,7 +28,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         List<Predicate> predicates = new ArrayList<>();
 
         if (users != null && !users.isEmpty()) {
-            predicates.add(root.get("initiatorId").in(users));
+            predicates.add(root.get("userId").in(users));
         }
 
         if (states != null && !states.isEmpty()) {

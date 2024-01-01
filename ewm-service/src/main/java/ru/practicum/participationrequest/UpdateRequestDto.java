@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class ParticipationRequestFullDto {
-    private String created;
-    private Long event;
-    private Long id;
-    private Long requester;
+public class UpdateRequestDto {
+    private List<Long> requestIds;
     private String status;
-
 }

@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.exceptions.ResourceConflictException;
-
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,10 @@ public class CategoryController {
 
     // Получить все категории
     @GetMapping("/categories")
-    public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
+    public List<CategoryDto> getCategories(
+            @RequestParam(value = "from", defaultValue = "0") int from,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return categoryService.getCategories(from, size);
     }
 
     // Получить категорию по id

@@ -3,6 +3,8 @@ package ru.practicum.users;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.practicum.exceptions.ResourceConflictException;
+import ru.practicum.validations.EmailValidator;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class UserService {
 
     // Добавить пользователя
     public User addUser(User user) {
+        if (!EmailValidator.isEmailPartLengthValid(user.getEmail())) {
+            throw new ResourceConflictException("Email is incorrect");
+        }
         return userRepository.save(user);
     }
 

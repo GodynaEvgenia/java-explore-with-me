@@ -1,5 +1,7 @@
 package ru.practicum.compilation;
 
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping()
+@Slf4j
 public class CompilationController {
     private final CompilationService compilationService;
 
@@ -16,7 +19,7 @@ public class CompilationController {
     }
 
     @PostMapping("/admin/compilations")
-    public ResponseEntity<CompilationResponseDto> create(@RequestBody CreateCompilationDto request) {
+    public ResponseEntity<CompilationResponseDto> create(@RequestBody @Valid CreateCompilationDto request) {
         CompilationResponseDto resp = compilationService.createCompilation(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
@@ -28,7 +31,7 @@ public class CompilationController {
     }
 
     @PatchMapping("/admin/compilations/{compId}")
-    public ResponseEntity<CompilationResponseDto> update(@PathVariable Long compId, @RequestBody UpdateCompilationDto dto) {
+    public ResponseEntity<CompilationResponseDto> update(@PathVariable Long compId, @RequestBody @Valid UpdateCompilationDto dto) {
         CompilationResponseDto updatedSelection = compilationService.updateSelection(compId, dto);
         return ResponseEntity.ok(updatedSelection);
     }
@@ -38,6 +41,7 @@ public class CompilationController {
             @RequestParam(value = "pinned", required = false) Boolean pinned,
             @RequestParam(value = "from", defaultValue = "0") int from,
             @RequestParam(value = "size", defaultValue = "10") int size) {
+        log.info("CONTROLLER SIZE="+size);
         List<CompilationResponseDto> compilations = compilationService.getCompilations(pinned, from, size);
         return compilations;
 

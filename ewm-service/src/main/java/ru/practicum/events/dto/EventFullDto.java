@@ -1,10 +1,13 @@
 package ru.practicum.events.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.category.CategoryDto;
 import ru.practicum.events.LocationDto;
 import ru.practicum.users.UserDto;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,7 +17,9 @@ public class EventFullDto {
     private int confirmedRequests;
     private String createdOn;
     private String description;
-    private String eventDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+   // private String eventDate;
+    private LocalDateTime eventDate;
     private Long id;
     private UserDto initiator;
     private LocationDto location;

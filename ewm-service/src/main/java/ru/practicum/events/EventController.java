@@ -32,10 +32,10 @@ public class EventController {
     }
 
     @PostMapping("/users/{userId}/events")
-    public ResponseEntity<Event> addEvent(
+    public ResponseEntity<EventDto> addEvent(
             @PathVariable Long userId,
             @Valid @RequestBody NewEventDto eventDto) {
-        Event createdEvent = eventService.addEvent(userId, eventDto);
+        EventDto createdEvent = eventService.addEvent(userId, eventDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
 
 
@@ -65,6 +65,7 @@ public class EventController {
         }
     }
 
+
     @PatchMapping("/users/{userId}/events/{eventId}")
     public EventFullDto updateEvent(@PathVariable Long userId,
                                     @PathVariable Long eventId,
@@ -92,6 +93,29 @@ public class EventController {
             @RequestParam(value = "size", defaultValue = "10") Integer size
     ) {
         return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+    }
+
+    @GetMapping("/events")
+    public List<EventFullDto> getEvents_(
+            @RequestParam(value = "users", required = false) List<Long> users,
+            @RequestParam(value = "states", required = false) List<String> states,
+            @RequestParam(value = "categories", required = false) List<Long> categories,
+            @RequestParam(value = "rangeStart", required = false) String rangeStart,
+            @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
+            @RequestParam(value = "from", defaultValue = "0") Integer from,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ) {
+        return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+    }
+
+    @GetMapping("/events/{id}")
+    public ResponseEntity<EventFullDto> getEventById(@PathVariable Long id) {
+        try {
+            EventFullDto eventDetails = eventService.getPublishedEventDetails(id);
+            return ResponseEntity.ok(eventDetails);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

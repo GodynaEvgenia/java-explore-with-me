@@ -17,7 +17,7 @@ public class User {
     private Long id;
 
     @NotBlank
-    @Size(min = 6, max = 64)
+    @Size(min = 6, max = 254)
     private String email;
 
     @NotBlank

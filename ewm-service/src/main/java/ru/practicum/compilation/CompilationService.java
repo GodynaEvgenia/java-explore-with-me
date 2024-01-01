@@ -39,7 +39,11 @@ public class CompilationService {
     public CompilationResponseDto createCompilation(CreateCompilationDto dto) {
         Compilation compilation = new Compilation();
         compilation.setTitle(dto.getTitle());
-        compilation.setPinned(dto.getPinned());
+        if (dto.getPinned() == null){
+            compilation.setPinned(false);
+        } else {
+            compilation.setPinned(dto.getPinned());
+        }
         compilation = compilationRepository.save(compilation);
 
         // Связываем события, если есть
@@ -78,11 +82,12 @@ public class CompilationService {
                     dto.setTitle(event.getTitle());
                     dto.setAnnotation(event.getAnnotation());
                     dto.setCategory(new CategoryDto(event.getCategoryId(), null));
-                    dto.setUser(new UserDto(event.getUserId(), null));
+                    dto.setInitiator(new UserDto(event.getUserId(), null));
                     dto.setPaid(event.getPaid());
                     dto.setEventDate(event.getEventDate()/*.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))*/);
                     // dto.(event.getConfirmedRequests());
                     // dto.setViews(event.getViews());
+
                     return dto;
                 }).collect(Collectors.toList());
 
@@ -143,6 +148,8 @@ public class CompilationService {
     }
 
     public List<CompilationResponseDto> getCompilations(Boolean pinned, int from, int size) {
+        log.info("SIZE="+size);
+
         Pageable pageable = PageRequest.of(from / size, size);
         Page<Compilation> page;
 

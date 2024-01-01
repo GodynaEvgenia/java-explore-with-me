@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.category.CategoryDto;
 import ru.practicum.events.LocationDto;
+import ru.practicum.events.Status;
 import ru.practicum.users.UserDto;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class EventDto {
     private CategoryDto category;
 
     @NotNull
-    private UserDto user;
+    private UserDto initiator;
 
     @NotBlank
     @Size(max = 7000)
@@ -51,5 +52,9 @@ public class EventDto {
     @NotBlank
     @Size(max = 120)
     private String title;
+
+    private Status state;
+
+    private LocalDateTime createdOn;
 
 }

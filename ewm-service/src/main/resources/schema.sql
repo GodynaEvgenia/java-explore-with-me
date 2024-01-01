@@ -40,10 +40,6 @@ CREATE TABLE IF NOT EXISTS participation_request (
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     CONSTRAINT pk_participation_request PRIMARY KEY (id),
     CONSTRAINT fk_requester_user FOREIGN KEY (requester) REFERENCES users(id)
-    -- Опционально: внешний ключ на таблицу событий
-    -- FOREIGN KEY (event) REFERENCES event(id),
-    -- Опционально: внешний ключ на таблицу пользователей
-    -- FOREIGN KEY (requester) REFERENCES users(id)
 );
 
 -- Таблица для подборки
