@@ -56,18 +56,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version> <!-- или ваша версия -->
-                <configuration>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
-                    <source>18</source>   <!-- замените на вашу версию Java -->
-                    <target>18</target>   <!-- замените на вашу версию Java -->
-                </configuration>
-            </plugin>
+
 
         </plugins>
     </build>
