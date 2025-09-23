@@ -19,7 +19,7 @@
 
 	<properties>
 		<java.version>18</java.version>
-		<projectlombok.version>1.18.36</projectlombok.version>
+		<projectlombok.version>1.18.24</projectlombok.version>
 	</properties>
 
 	<modules>
