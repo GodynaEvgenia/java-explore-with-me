@@ -39,6 +39,11 @@
             <optional>true</optional>
             <version>1.18.24</version>
         </dependency>
+        <dependency>
+            <groupId>com.apple</groupId>
+            <artifactId>AppleJavaExtensions</artifactId>
+            <version>1.4</version>
+        </dependency>
 
     </dependencies>
 
