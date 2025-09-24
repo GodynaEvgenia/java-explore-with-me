@@ -21,7 +21,6 @@ public class StatsService {
 
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         if (unique) {
-            //return repository.findUniqueStats(start, end, uris);
             if (uris == null || uris.isEmpty()) {
                 return repository.findUniqueStatsWithoutUris(start, end);
             } else {
@@ -33,7 +32,6 @@ public class StatsService {
             } else {
                 return repository.findStats(start, end, uris);
             }
-            //return repository.findStats(start, end, uris);
         }
     }
 }
