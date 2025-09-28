@@ -2,16 +2,13 @@ package ru.practicum;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-
-import ru.practicum.*;
 import ru.practicum.dto.ViewStats;
 import ru.practicum.model.EndpointHit;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class StatsServiceTest {
