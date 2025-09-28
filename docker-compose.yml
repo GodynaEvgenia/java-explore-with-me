@@ -55,7 +55,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-main-db:5432/ewm
       - SPRING_DATASOURCE_USERNAME=ewm
       - SPRING_DATASOURCE_PASSWORD=ewm
-      - STATS_SERVICE_URL=http://stats-server:9090
+      - STATS_SERVICE_URL=http://stats-service:9090
 
 
 
