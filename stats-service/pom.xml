@@ -15,12 +15,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.5.6</version>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>3.4.2</version>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,13 +42,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.0</version> <!-- Укажите актуальную версию -->
+            <version>5.9.3</version> <!-- Укажите актуальную версию -->
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.0</version> <!-- Укажите актуальную версию -->
+            <version>5.9.3</version> <!-- Укажите актуальную версию -->
             <scope>test</scope>
         </dependency>
         <dependency>
