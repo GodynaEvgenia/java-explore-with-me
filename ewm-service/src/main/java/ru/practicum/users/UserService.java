@@ -14,6 +14,7 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     public List<User> getAllUsers(int from, int size) {
         int page = from / size; // вычисляем номер страницы
         Pageable pageable = PageRequest.of(page, size);
@@ -32,7 +33,7 @@ public class UserService {
 
     // Удалить пользователя по id
     public boolean deleteUser(Long id) {
-        if(userRepository.existsById(id)) {
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return true;
         }

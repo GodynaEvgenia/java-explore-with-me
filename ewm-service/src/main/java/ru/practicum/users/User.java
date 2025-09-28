@@ -1,10 +1,6 @@
 package ru.practicum.users;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -21,11 +17,11 @@ public class User {
     private Long id;
 
     @NotBlank
-    @Size(min=6, max=64)
+    @Size(min = 6, max = 64)
     private String email;
 
     @NotBlank
-    @Size(min=2, max=250)
+    @Size(min = 2, max = 250)
     private String name;
 
 }
