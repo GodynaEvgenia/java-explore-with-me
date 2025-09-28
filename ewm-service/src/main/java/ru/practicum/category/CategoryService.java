@@ -1,14 +1,10 @@
 package ru.practicum.category;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.category.Category;
-import ru.practicum.category.CategoryRepository;
 import ru.practicum.exceptions.ResourceConflictException;
 
 import java.util.List;
 import java.util.Optional;
-
-import static ch.qos.logback.core.joran.spi.ConsoleTarget.findByName;
 
 @Service
 public class CategoryService {
