@@ -21,6 +21,7 @@ import ru.practicum.users.UserRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -116,11 +117,20 @@ public class EventService {
         return dto;
     }
 
-    public EventFullDto updateEvent(Long userId, Long eventId, EventUpdateDto updateDto) {
-        Event event = eventRepository.findByIdAndUserId(eventId, userId)
-                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
-
+    public EventFullDto updateEvent(Long userId,
+                                    Long eventId,
+                                    EventUpdateDto updateDto,
+                                    Boolean isAdmin) {
+        Event event;
+        if (isAdmin){
+            event = eventRepository.findById(eventId)
+                    .orElseThrow(() -> new EntityNotFoundException("Event not found"));
+        } else {
+            event = eventRepository.findByIdAndUserId(eventId, userId)
+                    .orElseThrow(() -> new EntityNotFoundException("Event not found"));
+        }
         // Проверка статуса события
+
         Status status = event.getState(); // предполагается enum
         if (!(status == Status.CANCELED || status == Status.PENDING)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Only cancellations or pending events can be modified");
@@ -171,6 +181,8 @@ public class EventService {
                 event.setState(Status.CANCELED);
             } else if ("SEND_TO_REVIEW".equals(action)) {
                 event.setState(Status.PENDING);
+            } else if ("PUBLISH_EVENT".equals(action) && isAdmin){
+                event.setState(Status.PUBLISHED);
             }
         }
 
@@ -178,4 +190,25 @@ public class EventService {
 
         return convertToFullDto(savedEvent);
     }
+
+    public List<EventFullDto> getEvents(List<Long> users, List<String> states, List<Long> categories,
+                                        String rangeStartStr, String rangeEndStr, Integer from, Integer size) {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime rangeStart = null;
+        LocalDateTime rangeEnd = null;
+       // try {
+            if (rangeStartStr != null) {
+                rangeStart = LocalDateTime.parse(rangeStartStr, formatter);
+            }
+            if (rangeEndStr != null) {
+                rangeEnd = LocalDateTime.parse(rangeEndStr, formatter);
+            }
+       // } catch (DateTimeParseException e) {
+            // Обработка ошибок парсинга при необходимости
+        //}
+
+        List<Event> events = eventRepository.findEventsByFilters(users, states, categories, rangeStart, rangeEnd, from, size);
+        return events.stream().map(this::convertToFullDto).collect(Collectors.toList());
+    }
+
 }

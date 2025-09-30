@@ -56,7 +56,29 @@ public class EventController {
     public EventFullDto updateEvent(@PathVariable Long userId,
                                     @PathVariable Long eventId,
                                     @RequestBody EventUpdateDto updateDto) {
-        return eventService.updateEvent(userId, eventId, updateDto);
+        return eventService.updateEvent(userId, eventId, updateDto, false);
         //return convertToDto(updatedEvent);
     }
+
+    @PatchMapping("/admin/events/{eventId}")
+    public EventFullDto updateEventAdmin(//@PathVariable Long userId,
+                                    @PathVariable Long eventId,
+                                    @RequestBody EventUpdateDto updateDto) {
+        return eventService.updateEvent(null, eventId, updateDto,true);
+
+    }
+
+    @GetMapping("/admin/events")
+    public List<EventFullDto> getEvents(
+            @RequestParam(value = "users", required = false) List<Long> users,
+            @RequestParam(value = "states", required = false) List<String> states,
+            @RequestParam(value = "categories", required = false) List<Long> categories,
+            @RequestParam(value = "rangeStart", required = false) String rangeStart,
+            @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
+            @RequestParam(value = "from", defaultValue = "0") Integer from,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ) {
+        return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+    }
+
 }

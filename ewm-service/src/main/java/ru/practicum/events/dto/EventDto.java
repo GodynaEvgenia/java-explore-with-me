@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class EventDto {
-
+    private Long id;
     @NotBlank
     @Size(max = 2000)
     private String annotation;

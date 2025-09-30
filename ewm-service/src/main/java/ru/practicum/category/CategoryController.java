@@ -10,7 +10,6 @@ import ru.practicum.exceptions.ResourceConflictException;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/admin/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
