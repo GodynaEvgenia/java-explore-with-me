@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.events.Event;
 import ru.practicum.events.EventRepository;
+import ru.practicum.events.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ParticipationRequestService {
         }
 
         // Проверка статуса события
-        if (!"PUBLISHED".equals(event.getState())) {
+        if (!Status.PUBLISHED.equals(event.getState())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Cannot request participation in an unpublished event");
         }
