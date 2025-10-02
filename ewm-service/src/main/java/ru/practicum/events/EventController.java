@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.events.dto.EventDto;
@@ -36,8 +35,8 @@ public class EventController {
     public ResponseEntity<Event> addEvent(
             @PathVariable Long userId,
             @Valid @RequestBody NewEventDto eventDto) {
-            Event createdEvent = eventService.addEvent(userId, eventDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
+        Event createdEvent = eventService.addEvent(userId, eventDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
 
 
     }
@@ -76,9 +75,9 @@ public class EventController {
 
     @PatchMapping("/admin/events/{eventId}")
     public EventFullDto updateEventAdmin(//@PathVariable Long userId,
-                                    @PathVariable Long eventId,
-                                    @RequestBody EventUpdateDto updateDto) {
-        return eventService.updateEvent(null, eventId, updateDto,true);
+                                         @PathVariable Long eventId,
+                                         @RequestBody EventUpdateDto updateDto) {
+        return eventService.updateEvent(null, eventId, updateDto, true);
 
     }
 

@@ -92,7 +92,7 @@ public class EventService {
         dto.setEventDate(event.getEventDate().toString());
         dto.setPaid(event.getPaid());
         dto.setParticipantLimit(event.getParticipantLimit());
-        if (event.getPublishedOn() != null){
+        if (event.getPublishedOn() != null) {
             dto.setPublishedOn(event.getPublishedOn().toString());
         }
 
@@ -122,7 +122,7 @@ public class EventService {
                                     EventUpdateDto updateDto,
                                     Boolean isAdmin) {
         Event event;
-        if (isAdmin){
+        if (isAdmin) {
             event = eventRepository.findById(eventId)
                     .orElseThrow(() -> new EntityNotFoundException("Event not found"));
         } else {
@@ -148,40 +148,40 @@ public class EventService {
 
 
         // Обновление данных
-        if (updateDto.getAnnotation() != null){
+        if (updateDto.getAnnotation() != null) {
             event.setAnnotation(updateDto.getAnnotation());
         }
-        if (updateDto.getCategory() != null){
+        if (updateDto.getCategory() != null) {
             event.setCategoryId(updateDto.getCategory());
         }
-        if (updateDto.getDescription() != null){
+        if (updateDto.getDescription() != null) {
             event.setDescription(updateDto.getDescription());
         }
 
 
-        if (updateDto.getPaid() != null){
+        if (updateDto.getPaid() != null) {
             event.setPaid(updateDto.getPaid());
         }
-        if (updateDto.getParticipantLimit() != null){
+        if (updateDto.getParticipantLimit() != null) {
             event.setParticipantLimit(updateDto.getParticipantLimit());
         }
-        if (updateDto.getRequestModeration() != null){
+        if (updateDto.getRequestModeration() != null) {
             event.setRequestModeration(updateDto.getRequestModeration());
         }
-        if (updateDto.getTitle() != null){
+        if (updateDto.getTitle() != null) {
             event.setTitle(updateDto.getTitle());
         }
         if (updateDto.getLocation() != null) {
             event.setLocationLat(updateDto.getLocation().getLat());
             event.setLocationLon(updateDto.getLocation().getLon());
         }
-        if (updateDto.getStateAction() != null){
+        if (updateDto.getStateAction() != null) {
             String action = updateDto.getStateAction();
             if ("CANCEL_REVIEW".equals(action)) {
                 event.setState(Status.CANCELED);
             } else if ("SEND_TO_REVIEW".equals(action)) {
                 event.setState(Status.PENDING);
-            } else if ("PUBLISH_EVENT".equals(action) && isAdmin){
+            } else if ("PUBLISH_EVENT".equals(action) && isAdmin) {
                 event.setState(Status.PUBLISHED);
             }
         }
@@ -196,15 +196,15 @@ public class EventService {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime rangeStart = null;
         LocalDateTime rangeEnd = null;
-       // try {
-            if (rangeStartStr != null) {
-                rangeStart = LocalDateTime.parse(rangeStartStr, formatter);
-            }
-            if (rangeEndStr != null) {
-                rangeEnd = LocalDateTime.parse(rangeEndStr, formatter);
-            }
-       // } catch (DateTimeParseException e) {
-            // Обработка ошибок парсинга при необходимости
+        // try {
+        if (rangeStartStr != null) {
+            rangeStart = LocalDateTime.parse(rangeStartStr, formatter);
+        }
+        if (rangeEndStr != null) {
+            rangeEnd = LocalDateTime.parse(rangeEndStr, formatter);
+        }
+        // } catch (DateTimeParseException e) {
+        // Обработка ошибок парсинга при необходимости
         //}
 
         List<Event> events = eventRepository.findEventsByFilters(users, states, categories, rangeStart, rangeEnd, from, size);

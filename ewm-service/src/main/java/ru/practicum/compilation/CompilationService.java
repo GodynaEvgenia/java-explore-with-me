@@ -74,7 +74,7 @@ public class CompilationService {
         List<EventDto> eventDtos = eventList.stream()
                 .map(event -> {
                     EventDto dto = new EventDto();
-                     dto.setId(event.getId());
+                    dto.setId(event.getId());
                     dto.setTitle(event.getTitle());
                     dto.setAnnotation(event.getAnnotation());
                     dto.setCategory(new CategoryDto(event.getCategoryId(), null));
@@ -129,7 +129,7 @@ public class CompilationService {
             events = eventRepository.findAllById(dto.getEvents());
 
             compilationEventRepository.deleteAllByCompilation_id(compilation.getId());
-            dto.getEvents().stream().forEach(e->{
+            dto.getEvents().stream().forEach(e -> {
                 CompilationEvent ce = new CompilationEvent();
                 ce.setCompilation(compilation);
                 ce.setEvent_id(e);

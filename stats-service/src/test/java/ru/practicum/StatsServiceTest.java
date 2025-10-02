@@ -3,7 +3,6 @@ package ru.practicum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.dto.ViewStats;
-import ru.practicum.model.EndpointHit;
 
 import java.time.LocalDateTime;
 import java.util.List;

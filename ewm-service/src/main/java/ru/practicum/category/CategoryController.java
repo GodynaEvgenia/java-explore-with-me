@@ -36,8 +36,8 @@ public class CategoryController {
     @PostMapping("/admin/categories")
     public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category) {
         try {
-        Category createdCategory = categoryService.createCategory(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
+            Category createdCategory = categoryService.createCategory(category);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
         } catch (ResourceConflictException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(category);
         }
