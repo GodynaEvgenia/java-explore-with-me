@@ -50,7 +50,7 @@ public class CompilationService {
                         CompilationEvent link = new CompilationEvent();
                         //link.setCompilation_id(finalCompilation.getId());
                         link.setCompilation(finalCompilation);
-                        link.setEvent_id(eventId);
+                        link.setEventId(eventId);
                         compilationEventRepository.save(link);
                         return link;
                     }).collect(Collectors.toList());
@@ -132,7 +132,7 @@ public class CompilationService {
             dto.getEvents().stream().forEach(e -> {
                 CompilationEvent ce = new CompilationEvent();
                 ce.setCompilation(compilation);
-                ce.setEvent_id(e);
+                ce.setEventId(e);
                 compilationEventRepository.save(ce);
             });
         }
@@ -157,7 +157,7 @@ public class CompilationService {
             List<CompilationEvent> cm = compilationEventRepository.findByCompilation_Id(compilation.getId());
             List<Event> events = cm.stream()
                     .map(c -> {
-                        return eventRepository.findById(c.getEvent_id()).get();
+                        return eventRepository.findById(c.getEventId()).get();
                     }).toList();
             return toResponseDto(compilation, events);
         }).toList();
@@ -179,8 +179,8 @@ public class CompilationService {
         List<CompilationEvent> ce = compilationEventRepository.findByCompilation_Id(compilation.getId());
         List<Event> events = ce.stream()
                 .map(c -> {
-                    return eventRepository.findById(c.getEvent_id()).get();
-                }).toList();
+                    return eventRepository.findById(c.getEventId()).get();
+                }).collect(Collectors.toList());
         return toResponseDto(compilation, events);
     }
 }
