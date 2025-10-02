@@ -42,7 +42,7 @@ public class EventService {
     }
 
     public Event addEvent(Long userId, NewEventDto dto) {
-        Event event = mapper.NewEventDtoToEntity(dto, userId);
+        Event event = mapper.newEventDtoToEntity(dto, userId);
         return eventRepository.save(event);
     }
 

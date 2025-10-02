@@ -23,7 +23,7 @@ public class EventMapper {
         return dto;
     }
 
-    public Event NewEventDtoToEntity(NewEventDto dto, Long userId) {
+    public Event newEventDtoToEntity(NewEventDto dto, Long userId) {
         Event event = new Event();
         event.setUserId(userId);
         event.setAnnotation(dto.getAnnotation());

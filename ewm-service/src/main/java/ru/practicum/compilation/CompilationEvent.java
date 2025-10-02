@@ -22,5 +22,5 @@ public class CompilationEvent {
     private Compilation compilation;
 
     //private Long compilation_id;
-    private Long event_id;
+    private Long eventId;
 }
