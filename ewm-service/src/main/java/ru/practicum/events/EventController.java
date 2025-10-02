@@ -1,26 +1,35 @@
 package ru.practicum.events;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.events.dto.EventDto;
 import ru.practicum.events.dto.EventFullDto;
 import ru.practicum.events.dto.EventUpdateDto;
 import ru.practicum.events.dto.NewEventDto;
 import ru.practicum.exceptions.EntityNotFoundException;
+import ru.practicum.stats.StatsClient;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping()
 public class EventController {
 
     private final EventService eventService;
+    private final StatsClient statsClient;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService,
+                           StatsClient statsClient) {
         this.eventService = eventService;
+        this.statsClient = statsClient;
     }
 
     @PostMapping("/users/{userId}/events")
@@ -37,8 +46,13 @@ public class EventController {
     public List<EventDto> getUserEvents(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request) {
+        log.info("/users/{userId}/events");
+        statsClient.sendHit(new EndpointHitDto(null, "/users/{userId}/events", request.getRequestURI(),
+                request.getRemoteAddr(), LocalDateTime.now()));
         return eventService.getEventsByUser(userId, from, size);
+
     }
 
     @GetMapping("/users/{userId}/events/{eventId}")

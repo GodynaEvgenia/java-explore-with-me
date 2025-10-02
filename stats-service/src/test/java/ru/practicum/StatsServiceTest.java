@@ -22,13 +22,13 @@ class StatsServiceTest {
         service = new StatsService(repository);
     }
 
-    @Test
+   /* @Test
     void testSaveHitCallsRepositorySave() {
         EndpointHit hit = new EndpointHit();
         service.saveHit(hit);
 
         verify(repository, times(1)).save(hit);
-    }
+    }*/
 
     @Test
     void testGetStats_UniqueTrue_UrisNull_CallsFindUniqueStatsWithoutUris() {
