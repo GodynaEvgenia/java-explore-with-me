@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.dto.EndpointHitDto;
 
-import java.time.format.DateTimeFormatter;
-
 @Component
 public class StatsClient {
     private final RestTemplate restTemplate;
