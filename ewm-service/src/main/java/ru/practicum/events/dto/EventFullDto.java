@@ -18,7 +18,7 @@ public class EventFullDto {
     private String createdOn;
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-   // private String eventDate;
+    // private String eventDate;
     private LocalDateTime eventDate;
     private Long id;
     private UserDto initiator;

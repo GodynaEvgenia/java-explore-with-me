@@ -3,6 +3,7 @@ package ru.practicum.validations;
 public class EmailValidator {
     /**
      * Проверяет локальную и доменную части email на длину.
+     *
      * @param email - email для проверки
      * @return true, если обе части удовлетворяют условиям; false иначе
      */

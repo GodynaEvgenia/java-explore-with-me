@@ -19,9 +19,9 @@ public class ParticipationRequestController {
 
     @PostMapping("/users/{userId}/requests")
     public ResponseEntity<ParticipationRequestFullDto> createRequest(@PathVariable Long userId,
-                                                     @RequestParam Long eventId) {
+                                                                     @RequestParam Long eventId) {
         ParticipationRequest request = requestService.createRequest(userId, eventId);
-       // return toDto(request);
+        // return toDto(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(request));
     }
 
@@ -64,7 +64,7 @@ public class ParticipationRequestController {
             @PathVariable Long userId,
             @PathVariable Long eventId,
             @RequestBody UpdateRequestDto dto) {
-       UpdateRequestsResponse request = requestService.updateRequestStatus(userId, eventId, dto.getRequestIds(), dto.getStatus());
+        UpdateRequestsResponse request = requestService.updateRequestStatus(userId, eventId, dto.getRequestIds(), dto.getStatus());
         return ResponseEntity.ok(request);//.build();
     }
 }

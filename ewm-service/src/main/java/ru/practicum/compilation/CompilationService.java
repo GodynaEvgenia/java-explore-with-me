@@ -39,7 +39,7 @@ public class CompilationService {
     public CompilationResponseDto createCompilation(CreateCompilationDto dto) {
         Compilation compilation = new Compilation();
         compilation.setTitle(dto.getTitle());
-        if (dto.getPinned() == null){
+        if (dto.getPinned() == null) {
             compilation.setPinned(false);
         } else {
             compilation.setPinned(dto.getPinned());
@@ -148,7 +148,7 @@ public class CompilationService {
     }
 
     public List<CompilationResponseDto> getCompilations(Boolean pinned, int from, int size) {
-        log.info("SIZE="+size);
+        log.info("SIZE=" + size);
 
         Pageable pageable = PageRequest.of(from / size, size);
         Page<Compilation> page;

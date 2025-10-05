@@ -12,6 +12,7 @@ import ru.practicum.events.dto.EventFullDto;
 import ru.practicum.events.dto.EventUpdateDto;
 import ru.practicum.events.dto.NewEventDto;
 import ru.practicum.exceptions.EntityNotFoundException;
+import ru.practicum.exceptions.ErrorResponse;
 import ru.practicum.stats.StatsClient;
 
 import java.time.LocalDateTime;
@@ -67,19 +68,40 @@ public class EventController {
 
 
     @PatchMapping("/users/{userId}/events/{eventId}")
-    public EventFullDto updateEvent(@PathVariable Long userId,
-                                    @PathVariable Long eventId,
-                                    @RequestBody EventUpdateDto updateDto) {
-        return eventService.updateEvent(userId, eventId, updateDto, false);
+    public ResponseEntity<?> updateEvent(@PathVariable Long userId,
+                                         @PathVariable Long eventId,
+                                         @RequestBody @Valid EventUpdateDto updateDto) {
+        try {
+            EventFullDto res = eventService.updateEvent(userId, eventId, updateDto, false);
+            return ResponseEntity.ok(res);
+        } catch (NumberFormatException ex) {
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "BAD_REQUEST",
+                    "Incorrectly made request.",
+                    "Failed to convert value of type java.lang.String to required type int;"
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
         //return convertToDto(updatedEvent);
     }
 
     @PatchMapping("/admin/events/{eventId}")
-    public EventFullDto updateEventAdmin(//@PathVariable Long userId,
-                                         @PathVariable Long eventId,
-                                         @RequestBody EventUpdateDto updateDto) {
-        return eventService.updateEvent(null, eventId, updateDto, true);
-
+    public ResponseEntity<?> updateEventAdmin(
+            @PathVariable Long eventId,
+            @RequestBody @Valid EventUpdateDto updateDto) {
+        try {
+            EventFullDto res = eventService.updateEvent(null, eventId, updateDto, true);
+            return ResponseEntity.ok(res);
+        } catch (NumberFormatException ex) {
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "BAD_REQUEST",
+                    "Incorrectly made request.",
+                    "Failed to convert value of type java.lang.String to required type int;"
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
     @GetMapping("/admin/events")
@@ -109,12 +131,18 @@ public class EventController {
     }
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<EventFullDto> getEventById(@PathVariable Long id) {
+    public ResponseEntity<?> getEventById(@PathVariable Long id) {
         try {
             EventFullDto eventDetails = eventService.getPublishedEventDetails(id);
             return ResponseEntity.ok(eventDetails);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            // return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "BAD_REQUEST",
+                    "Incorrectly made request.",
+                    "Failed to convert value of type java.lang.String to required type int;"
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
 

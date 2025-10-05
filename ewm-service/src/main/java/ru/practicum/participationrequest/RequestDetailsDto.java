@@ -1,8 +1,6 @@
 package ru.practicum.participationrequest;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -14,6 +12,7 @@ public class RequestDetailsDto {
     private Long requester;
     private String status;
     private String created;
+
     public RequestDetailsDto(ParticipationRequest request) {
         this.id = request.getId();
         this.event = request.getEvent();

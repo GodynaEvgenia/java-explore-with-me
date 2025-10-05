@@ -41,7 +41,7 @@ public class UserController {
         try {
             User createdUser = userService.addUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } catch (ResourceConflictException ex){
+        } catch (ResourceConflictException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(user);
         }
     }

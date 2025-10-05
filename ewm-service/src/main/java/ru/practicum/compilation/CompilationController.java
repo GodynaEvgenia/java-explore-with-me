@@ -41,7 +41,7 @@ public class CompilationController {
             @RequestParam(value = "pinned", required = false) Boolean pinned,
             @RequestParam(value = "from", defaultValue = "0") int from,
             @RequestParam(value = "size", defaultValue = "10") int size) {
-        log.info("CONTROLLER SIZE="+size);
+        log.info("CONTROLLER SIZE=" + size);
         List<CompilationResponseDto> compilations = compilationService.getCompilations(pinned, from, size);
         return compilations;
 

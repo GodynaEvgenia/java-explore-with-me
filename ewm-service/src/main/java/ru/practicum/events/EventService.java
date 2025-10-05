@@ -94,7 +94,7 @@ public class EventService {
         EventFullDto dto = new EventFullDto();
         dto.setId(event.getId());
         dto.setAnnotation(event.getAnnotation());
-        dto.setConfirmedRequests(0);//TODO
+        dto.setConfirmedRequests(1);//TODO
         dto.setCreatedOn(event.getCreatedOn().toString());
         dto.setDescription(event.getDescription());
         //dto.setEventDate(event.getEventDate().toString());
@@ -202,7 +202,7 @@ public class EventService {
 
     public List<EventFullDto> getEvents(List<Long> users, List<String> states, List<Long> categories,
                                         String rangeStartStr, String rangeEndStr, Integer from, Integer size) {
-        //DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime rangeStart = null;
         LocalDateTime rangeEnd = null;
@@ -230,11 +230,11 @@ public class EventService {
         Event event = eventOpt.get();
 
         // собираем просмотры и подтвержденные запросы
-      //  long views = statisticsService.getEventViews(eventId);
-      //  long confirmedRequests = statisticsService.getConfirmedRequestsCount(eventId);
+        //  long views = statisticsService.getEventViews(eventId);
+        //  long confirmedRequests = statisticsService.getConfirmedRequestsCount(eventId);
 
         // сохраняем факт обращения к статистике
-     //   statisticsService.recordRequest(eventId);
+        //   statisticsService.recordRequest(eventId);
 
         // возвращаем DTO
       /*  return new EventFullDto(
