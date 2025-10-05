@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 public class StatsClient {
     private final RestTemplate restTemplate;
     private final String baseUrl; // например, http://localhost:8080, либо адрес вашего сервера
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public StatsClient(RestTemplate restTemplate,
                        @Value("${stats-service.url}") String baseUrl) {
