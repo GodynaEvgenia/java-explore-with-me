@@ -21,7 +21,7 @@ public class StatsClient {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public StatsClient(RestTemplate restTemplate,
-                       @Value("${stats.service.base-url}") String baseUrl) {
+                       @Value("${stats-service.url}") String baseUrl) {
         this.restTemplate = restTemplate;
         this.baseUrl = baseUrl;
     }
