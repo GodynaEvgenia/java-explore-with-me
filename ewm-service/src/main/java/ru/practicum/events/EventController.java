@@ -75,7 +75,6 @@ public class EventController {
             EventFullDto res = eventService.updateEvent(userId, eventId, updateDto, false);
             return ResponseEntity.ok(res);
         } catch (NumberFormatException ex) {
-            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",
                     "Incorrectly made request.",
@@ -83,18 +82,16 @@ public class EventController {
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-        //return convertToDto(updatedEvent);
     }
 
     @PatchMapping("/admin/events/{eventId}")
     public ResponseEntity<?> updateEventAdmin(
             @PathVariable Long eventId,
-            @RequestBody @Valid EventUpdateDto updateDto) {
+            @RequestBody EventUpdateDto updateDto) {
         try {
             EventFullDto res = eventService.updateEvent(null, eventId, updateDto, true);
             return ResponseEntity.ok(res);
         } catch (NumberFormatException ex) {
-            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",
                     "Incorrectly made request.",
@@ -118,7 +115,7 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public List<EventFullDto> getEvents_(
+    public ResponseEntity<?> getEvents_(
             @RequestParam(value = "users", required = false) List<Long> users,
             @RequestParam(value = "states", required = false) List<String> states,
             @RequestParam(value = "categories", required = false) List<Long> categories,
@@ -127,7 +124,17 @@ public class EventController {
             @RequestParam(value = "from", defaultValue = "0") Integer from,
             @RequestParam(value = "size", defaultValue = "10") Integer size
     ) {
-        return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+        try {
+            List<EventFullDto> events = eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+            return ResponseEntity.ok(events);
+        } catch (EntityNotFoundException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "BAD_REQUEST",
+                    "Incorrectly made request.",
+                    "Failed to convert value of type java.lang.String to required type int;"
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
     @GetMapping("/events/{id}")
@@ -136,7 +143,6 @@ public class EventController {
             EventFullDto eventDetails = eventService.getPublishedEventDetails(id);
             return ResponseEntity.ok(eventDetails);
         } catch (EntityNotFoundException e) {
-            // return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",
                     "Incorrectly made request.",

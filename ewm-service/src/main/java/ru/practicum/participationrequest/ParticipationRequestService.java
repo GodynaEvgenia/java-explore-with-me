@@ -69,7 +69,9 @@ public class ParticipationRequestService {
         } else {
             request.setStatus("CONFIRMED");
         }
-
+       /* if (pendingCount == 0){
+            request.setStatus("CONFIRMED");
+        }*/
         return requestRepository.save(request);
     }
 

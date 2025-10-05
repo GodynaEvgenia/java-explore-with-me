@@ -21,7 +21,6 @@ public class ParticipationRequestController {
     public ResponseEntity<ParticipationRequestFullDto> createRequest(@PathVariable Long userId,
                                                                      @RequestParam Long eventId) {
         ParticipationRequest request = requestService.createRequest(userId, eventId);
-        // return toDto(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(request));
     }
 

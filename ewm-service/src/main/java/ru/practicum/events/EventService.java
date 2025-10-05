@@ -43,6 +43,15 @@ public class EventService {
     }
 
     public EventDto addEvent(Long userId, NewEventDto dto) {
+        // Проверка даты
+        if (dto.getEventDate() != null) {
+            LocalDateTime now = LocalDateTime.now();
+            //LocalDateTime eventDate = LocalDateTime.parse(dto.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            if (dto.getEventDate().isBefore(now)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event date cannot be earlier than two hours from now");
+            }
+
+        }
         Event event = mapper.newEventDtoToEntity(dto, userId);
         return toDto(eventRepository.save(event));
     }
@@ -54,7 +63,6 @@ public class EventService {
         Page<Event> eventsPage = eventRepository.findByUserId(userId, pageable);
         List<Event> events = eventsPage.getContent();
 
-        // Преобразование в DTO для исключения лишней информации (если нужно)
         return events.stream()
                 .map(this::toDto)
                 //.collect(Collectors.toList());
@@ -130,7 +138,8 @@ public class EventService {
                                     Long eventId,
                                     EventUpdateDto updateDto,
                                     Boolean isAdmin) {
-        Event event;
+        Event event = new Event();
+
         if (isAdmin) {
             event = eventRepository.findById(eventId)
                     .orElseThrow(() -> new EntityNotFoundException("Event not found"));
@@ -150,7 +159,7 @@ public class EventService {
             LocalDateTime nowPlusTwoHours = LocalDateTime.now().plusHours(2);
             LocalDateTime eventDate = LocalDateTime.parse(updateDto.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             if (eventDate.isBefore(nowPlusTwoHours)) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Event date cannot be earlier than two hours from now");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event date cannot be earlier than two hours from now");
             }
             event.setEventDate(eventDate);//?????????
         }
@@ -180,6 +189,7 @@ public class EventService {
         if (updateDto.getTitle() != null) {
             event.setTitle(updateDto.getTitle());
         }
+
         if (updateDto.getLocation() != null) {
             event.setLocationLat(updateDto.getLocation().getLat());
             event.setLocationLon(updateDto.getLocation().getLon());
@@ -206,17 +216,19 @@ public class EventService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime rangeStart = null;
         LocalDateTime rangeEnd = null;
-        // try {
+
         if (rangeStartStr != null) {
             rangeStart = LocalDateTime.parse(rangeStartStr, formatter);
         }
         if (rangeEndStr != null) {
             rangeEnd = LocalDateTime.parse(rangeEndStr, formatter);
         }
-        // } catch (DateTimeParseException e) {
-        // Обработка ошибок парсинга при необходимости
-        //}
 
+        //поиск категорий
+        categories.stream().forEach(c -> {
+            Category category = categoryRepository.findById(c)
+                    .orElseThrow(() -> new EntityNotFoundException("Категория с id " + c + " не найдена"));
+        });
         List<Event> events = eventRepository.findEventsByFilters(users, states, categories, rangeStart, rangeEnd, from, size);
         return events.stream().map(this::convertToFullDto).collect(Collectors.toList());
     }
