@@ -21,18 +21,29 @@ public class EmailValidator {
         }
 
         String localPart = email.substring(0, atIndex);
-        String domainPart = email.substring(atIndex + 1);
+        String domainPartWithPossibleSubdomains = email.substring(atIndex + 1);
 
-        // Проверка длины частей
+        // Проверка длины локальной части
         if (localPart.length() > 64) {
             return false; // локальная часть больше 64 символов
         }
 
+        // Получаем доменную часть до первой точки или всю строку, если точек нет
+        int dotIndex = domainPartWithPossibleSubdomains.indexOf('.');
+
+        String domainPart;
+        if (dotIndex != -1) {
+            domainPart = domainPartWithPossibleSubdomains.substring(0, dotIndex);
+        } else {
+            domainPart = domainPartWithPossibleSubdomains;
+        }
+
+        // Проверка длины доменной части (до первой точки)
         if (domainPart.length() > 63) {
             return false; // доменная часть больше 63 символов
         }
 
-        // Опционально: можно добавить дополнительные проверки формата email
+        // Можно добавить дополнительные проверки по формату
 
         return true;
     }
