@@ -19,7 +19,7 @@ public class ParticipationRequestService {
     private final ParticipationRequestRepository requestRepository;
     private final EventRepository eventRepository;
 
-    private static final int MAX_REQUESTS_PER_EVENT = 100; // лимит
+    private static final int MAX_REQUESTS_PER_EVENT = 100;
 
     public ParticipationRequestService(ParticipationRequestRepository requestRepository,
                                        EventRepository eventRepository) {
@@ -73,9 +73,9 @@ public class ParticipationRequestService {
         } else {
             request.setStatus("CONFIRMED");
         }
-        /*if (pendingCount == 0) {
+        if (event.getParticipantLimit() == 0) {
             request.setStatus("CONFIRMED");
-        }*/
+        }
         return requestRepository.save(request);
     }
 
