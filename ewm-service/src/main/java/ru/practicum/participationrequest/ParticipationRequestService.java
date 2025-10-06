@@ -6,6 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.events.Event;
 import ru.practicum.events.EventRepository;
 import ru.practicum.events.Status;
+import ru.practicum.exceptions.ResourceConflictException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,7 +34,10 @@ public class ParticipationRequestService {
                         HttpStatus.NOT_FOUND,
                         "Event with id=" + eventId + " was not found"
                 ));
-
+        long confirmedCount = requestRepository.countByEventAndStatus(eventId, "CONFIRMED");
+        if ((long) event.getParticipantLimit() == confirmedCount) {
+            throw new ResourceConflictException("Превышен лимит участников");
+        }
         // Проверка, что инициатор не подает заявку на своё событие
         if (event.getUserId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -105,11 +109,16 @@ public class ParticipationRequestService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request IDs обязательны");
         }
 
+
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Событие не найдено"));
 
         boolean moderationRequired = event.getRequestModeration();
         int participantLimit = event.getParticipantLimit();
+        Long cnt = requestRepository.countByEvent(eventId);
+        if ((long) participantLimit == cnt) {
+            throw new ResourceConflictException("Превышен лимит участников");
+        }
 
         List<ParticipationRequest> requests = requestRepository.findAllById(requestIds);
         List<ParticipationRequest> requestedForUpdate = new ArrayList<>();
