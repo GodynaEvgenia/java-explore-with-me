@@ -43,7 +43,6 @@ public class EventService {
     }
 
     public EventDto addEvent(Long userId, NewEventDto dto) {
-        // Проверка даты
         if (dto.getEventDate() != null) {
             LocalDateTime now = LocalDateTime.now();
             //LocalDateTime eventDate = LocalDateTime.parse(dto.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -88,6 +87,7 @@ public class EventService {
         locationDto.setLon(event.getLocationLon());
         dto.setLocation(locationDto);
         dto.setState(event.getState());
+        dto.setRequestModeration(event.getRequestModeration());
         return dto;
     }
 
