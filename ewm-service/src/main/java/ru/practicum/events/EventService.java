@@ -14,6 +14,7 @@ import ru.practicum.events.dto.EventFullDto;
 import ru.practicum.events.dto.EventUpdateDto;
 import ru.practicum.events.dto.NewEventDto;
 import ru.practicum.exceptions.EntityNotFoundException;
+import ru.practicum.participationrequest.ParticipationRequestRepository;
 import ru.practicum.users.User;
 import ru.practicum.users.UserDto;
 import ru.practicum.users.UserRepository;
@@ -31,15 +32,18 @@ public class EventService {
     private final EventMapper mapper;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final ParticipationRequestRepository requestRepository;
 
     public EventService(EventRepository eventRepository,
                         EventMapper eventMapper,
                         UserRepository userRepository,
-                        CategoryRepository categoryRepository) {
+                        CategoryRepository categoryRepository,
+                        ParticipationRequestRepository requestRepository) {
         this.eventRepository = eventRepository;
         this.mapper = eventMapper;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.requestRepository = requestRepository;
     }
 
     public EventDto addEvent(Long userId, NewEventDto dto) {
@@ -102,7 +106,8 @@ public class EventService {
         EventFullDto dto = new EventFullDto();
         dto.setId(event.getId());
         dto.setAnnotation(event.getAnnotation());
-        dto.setConfirmedRequests(1);//TODO
+        long cnt = requestRepository.countByEventAndStatus(event.getId(), "CONFIRMED");
+        dto.setConfirmedRequests((int) cnt);
         dto.setCreatedOn(event.getCreatedOn().toString());
         dto.setDescription(event.getDescription());
         //dto.setEventDate(event.getEventDate().toString());
