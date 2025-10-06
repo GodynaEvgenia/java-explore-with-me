@@ -18,7 +18,7 @@ public class RequestDetailsDto {
         this.event = request.getEvent();
         this.requester = request.getRequester();
         this.status = request.getStatus();
-        this.created = request.getCreated().toString(); // или форматировать дату по необходимости
+        this.created = request.getCreated().toString().substring(0, 26); // dateStr.substring(0, 26); или форматировать дату по необходимости
     }
 
 }

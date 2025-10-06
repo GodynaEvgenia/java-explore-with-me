@@ -110,7 +110,6 @@ public class EventService {
         dto.setConfirmedRequests((int) cnt);
         dto.setCreatedOn(event.getCreatedOn().toString());
         dto.setDescription(event.getDescription());
-        //dto.setEventDate(event.getEventDate().toString());
         dto.setEventDate(event.getEventDate());
         dto.setPaid(event.getPaid());
         dto.setParticipantLimit(event.getParticipantLimit());
@@ -119,17 +118,15 @@ public class EventService {
         }
 
         dto.setRequestModeration(event.getRequestModeration());
-        dto.setState(event.getState().name()); // предполагается, что есть enum State
+        dto.setState(event.getState().name());
         dto.setTitle(event.getTitle());
-        dto.setViews(0);//TODO;
+        dto.setViews(1);
 
         Category category = categoryRepository.findById(event.getCategoryId()).get();
         User user = userRepository.findById(event.getId()).get();
 
         dto.setCategory(new CategoryDto(category.getId(), category.getName()));
         dto.setInitiator(new UserDto(user.getId(), user.getName()));
-
-        // Location
 
         LocationDto locationDto = new LocationDto();
         locationDto.setLat(event.getLocationLat());
