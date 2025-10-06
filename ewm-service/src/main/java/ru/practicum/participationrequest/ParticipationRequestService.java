@@ -35,7 +35,7 @@ public class ParticipationRequestService {
                         "Event with id=" + eventId + " was not found"
                 ));
         long confirmedCount = requestRepository.countByEventAndStatus(eventId, "CONFIRMED");
-        if ((long) event.getParticipantLimit() == confirmedCount) {
+        if ((long) event.getParticipantLimit() == confirmedCount && event.getParticipantLimit() > 0) {
             throw new ResourceConflictException("Превышен лимит участников");
         }
         // Проверка, что инициатор не подает заявку на своё событие
@@ -73,9 +73,9 @@ public class ParticipationRequestService {
         } else {
             request.setStatus("CONFIRMED");
         }
-       /* if (pendingCount == 0){
+        if (pendingCount == 0) {
             request.setStatus("CONFIRMED");
-        }*/
+        }
         return requestRepository.save(request);
     }
 
