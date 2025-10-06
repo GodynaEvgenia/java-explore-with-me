@@ -28,7 +28,7 @@ public class ParticipationRequestService {
     }
 
     public ParticipationRequest createRequest(Long userId, Long eventId) {
-        // Проверка существования события
+
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -73,9 +73,9 @@ public class ParticipationRequestService {
         } else {
             request.setStatus("CONFIRMED");
         }
-        if (pendingCount == 0) {
+        /*if (pendingCount == 0) {
             request.setStatus("CONFIRMED");
-        }
+        }*/
         return requestRepository.save(request);
     }
 
@@ -109,16 +109,11 @@ public class ParticipationRequestService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request IDs обязательны");
         }
 
-
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Событие не найдено"));
 
         boolean moderationRequired = event.getRequestModeration();
         int participantLimit = event.getParticipantLimit();
-        Long cnt = requestRepository.countByEvent(eventId);
-        if ((long) participantLimit == cnt) {
-            throw new ResourceConflictException("Превышен лимит участников");
-        }
 
         List<ParticipationRequest> requests = requestRepository.findAllById(requestIds);
         List<ParticipationRequest> requestedForUpdate = new ArrayList<>();

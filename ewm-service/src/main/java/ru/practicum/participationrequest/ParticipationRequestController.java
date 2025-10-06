@@ -26,12 +26,11 @@ public class ParticipationRequestController {
             ParticipationRequest request = requestService.createRequest(userId, eventId);
             return ResponseEntity.status(HttpStatus.CREATED).body(toDto(request));
         } catch (ResourceConflictException ex) {
-            //return ResponseEntity.status(HttpStatus.CONFLICT).body(userId);
 
             ErrorResponse errorResponse = new ErrorResponse(
-                    "BAD_REQUEST",
+                    "CONFLICT",
                     "Incorrectly made request.",
-                    "Failed to convert value of type java.lang.String to required type int;"
+                    " "
             );
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
