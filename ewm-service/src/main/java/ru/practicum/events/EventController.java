@@ -87,7 +87,7 @@ public class EventController {
     @PatchMapping("/admin/events/{eventId}")
     public ResponseEntity<?> updateEventAdmin(
             @PathVariable Long eventId,
-            @RequestBody EventUpdateDto updateDto) {
+            @RequestBody @Valid EventUpdateDto updateDto) {
         try {
             EventFullDto res = eventService.updateEvent(null, eventId, updateDto, true);
             return ResponseEntity.ok(res);

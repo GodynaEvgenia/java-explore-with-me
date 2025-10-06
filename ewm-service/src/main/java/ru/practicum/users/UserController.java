@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.exceptions.ResourceConflictException;
+import ru.practicum.exceptions.UserAlreadyExistsException;
 
 import java.util.List;
 
@@ -43,6 +44,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         } catch (ResourceConflictException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(user);
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(user);
         }
     }
 

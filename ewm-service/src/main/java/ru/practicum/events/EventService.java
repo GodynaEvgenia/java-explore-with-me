@@ -225,10 +225,12 @@ public class EventService {
         }
 
         //поиск категорий
-        categories.stream().forEach(c -> {
-            Category category = categoryRepository.findById(c)
-                    .orElseThrow(() -> new EntityNotFoundException("Категория с id " + c + " не найдена"));
-        });
+        if (categories != null && !categories.isEmpty()) {
+            categories.stream().forEach(c -> {
+                Category category = categoryRepository.findById(c)
+                        .orElseThrow(() -> new EntityNotFoundException("Категория с id " + c + " не найдена"));
+            });
+        }
         List<Event> events = eventRepository.findEventsByFilters(users, states, categories, rangeStart, rangeEnd, from, size);
         return events.stream().map(this::convertToFullDto).collect(Collectors.toList());
     }
