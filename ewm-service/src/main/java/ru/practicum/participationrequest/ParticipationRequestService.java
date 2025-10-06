@@ -63,7 +63,6 @@ public class ParticipationRequestService {
                     "Maximum requests reached");
         }
 
-        // Создаем заявку
         ParticipationRequest request = new ParticipationRequest();
         request.setEvent(eventId);
         request.setRequester(userId);
@@ -191,7 +190,7 @@ public class ParticipationRequestService {
 
     private ParticipationRequestFullDto toDto(ParticipationRequest request) {
         ParticipationRequestFullDto dto = new ParticipationRequestFullDto();
-        dto.setCreated(request.getCreated().toString());
+        dto.setCreated(request.getCreated().toString().substring(0, 26));
         dto.setEvent(request.getEvent());
         dto.setId(request.getId());
         dto.setRequester(request.getRequester());
