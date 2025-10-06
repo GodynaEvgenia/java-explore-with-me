@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.practicum.events.EventRepository;
 import ru.practicum.exceptions.ResourceConflictException;
 
 import java.util.List;
@@ -14,9 +15,12 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository,
+                           EventRepository eventRepository) {
         this.categoryRepository = categoryRepository;
+        this.eventRepository = eventRepository;
     }
 
     // Получить все категории
@@ -62,6 +66,9 @@ public class CategoryService {
 
     // Удалить категорию по id
     public void deleteCategory(Long id) {
+        if (eventRepository.existsByCategoryId(id)) {
+            throw new ResourceConflictException("На категорию ссылается событие");
+        }
         categoryRepository.deleteById(id);
     }
 }

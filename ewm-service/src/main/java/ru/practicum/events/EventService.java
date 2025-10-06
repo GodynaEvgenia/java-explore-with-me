@@ -153,6 +153,9 @@ public class EventService {
         if (!(status == Status.CANCELED || status == Status.PENDING)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Only cancellations or pending events can be modified");
         }
+        if (status.equals(Status.CANCELED) && updateDto.getStateAction().equals("PUBLISH_EVENT")) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only pending events can be modified");
+        }
 
         // Проверка даты
         if (updateDto.getEventDate() != null) {
@@ -196,7 +199,7 @@ public class EventService {
         }
         if (updateDto.getStateAction() != null) {
             String action = updateDto.getStateAction();
-            if ("CANCEL_REVIEW".equals(action)) {
+            if ("CANCEL_REVIEW".equals(action) || "REJECT_EVENT".equals(action)) {
                 event.setState(Status.CANCELED);
             } else if ("SEND_TO_REVIEW".equals(action)) {
                 event.setState(Status.PENDING);

@@ -19,4 +19,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                     LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);
 
     Optional<Event> findByIdAndState(Long id, Status state);
+
+    Boolean existsByCategoryId(Long categoryid);
 }

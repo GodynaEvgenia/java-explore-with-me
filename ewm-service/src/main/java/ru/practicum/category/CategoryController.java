@@ -60,8 +60,12 @@ public class CategoryController {
 
     // Удалить категорию по id
     @DeleteMapping("/admin/categories/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        try {
+            categoryService.deleteCategory(id);
+            return ResponseEntity.noContent().build();
+        } catch (ResourceConflictException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(id);
+        }
     }
 }
