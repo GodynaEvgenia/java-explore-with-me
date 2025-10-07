@@ -123,7 +123,7 @@ public class EventService {
         dto.setViews(1);
 
         Category category = categoryRepository.findById(event.getCategoryId()).get();
-        User user = userRepository.findById(event.getId()).get();
+        User user = userRepository.findById(event.getUserId()).get();
 
         dto.setCategory(new CategoryDto(category.getId(), category.getName()));
         dto.setInitiator(new UserDto(user.getId(), user.getName()));
