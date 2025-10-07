@@ -3,6 +3,7 @@ package ru.practicum.participationrequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.practicum.DateTimeUtils;
 import ru.practicum.events.Event;
 import ru.practicum.events.EventRepository;
 import ru.practicum.events.Status;
@@ -96,9 +97,9 @@ public class ParticipationRequestService {
     }
 
     public List<ParticipationRequestFullDto> getRequestsByUserAndEvent(Long userId, Long eventId) {
-        List<ParticipationRequest> requests = requestRepository.findByRequesterAndEvent(userId, eventId);
+        List<ParticipationRequest> requests = requestRepository.findByEvent(eventId);
         return requests.stream()
-                .map(req -> new ParticipationRequestFullDto(req.getStatus(), req.getEvent(), req.getId(), req.getRequester(), req.getStatus()))
+                .map(req -> new ParticipationRequestFullDto(req.getCreated().format(DateTimeUtils.DATE_TIME_FORMATTER), req.getEvent(), req.getId(), req.getRequester(), req.getStatus()))
                 .collect(Collectors.toList());
     }
 
