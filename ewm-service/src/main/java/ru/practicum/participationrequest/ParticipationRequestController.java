@@ -23,8 +23,8 @@ public class ParticipationRequestController {
     public ResponseEntity<?> createRequest(@PathVariable Long userId,
                                            @RequestParam Long eventId) {
         try {
-            ParticipationRequest request = requestService.createRequest(userId, eventId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(toDto(request));
+            RequestDetailsDto request = requestService.createRequest(userId, eventId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(request);
         } catch (ResourceConflictException ex) {
 
             ErrorResponse errorResponse = new ErrorResponse(

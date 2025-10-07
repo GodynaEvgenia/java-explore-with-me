@@ -27,7 +27,7 @@ public class ParticipationRequestService {
         this.eventRepository = eventRepository;
     }
 
-    public ParticipationRequest createRequest(Long userId, Long eventId) {
+    public RequestDetailsDto createRequest(Long userId, Long eventId) {
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -75,7 +75,8 @@ public class ParticipationRequestService {
         if (event.getParticipantLimit() == 0) {
             request.setStatus("CONFIRMED");
         }
-        return requestRepository.save(request);
+        ParticipationRequest savedRequest = requestRepository.save(request);
+        return new RequestDetailsDto(savedRequest);
     }
 
     public ParticipationRequest cancelRequest(Long userId, Long requestId) {
