@@ -2,10 +2,11 @@ package ru.practicum.participationrequest;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.practicum.DateTimeUtils;
+
 
 @Getter
 @Setter
-
 public class RequestDetailsDto {
     private Long id;
     private Long event;
@@ -18,7 +19,8 @@ public class RequestDetailsDto {
         this.event = request.getEvent();
         this.requester = request.getRequester();
         this.status = request.getStatus();
-        this.created = request.getCreated().toString().substring(0, 26); // dateStr.substring(0, 26); или форматировать дату по необходимости
+        this.created = request.getCreated().format(DateTimeUtils.DATE_TIME_FORMATTER);
+
     }
 
 }
