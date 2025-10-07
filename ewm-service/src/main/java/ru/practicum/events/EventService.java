@@ -76,11 +76,11 @@ public class EventService {
         EventDto dto = new EventDto();
 
         Category category = categoryRepository.findById(event.getCategoryId()).get();
-        User user = userRepository.findById(event.getId()).get();
+        User user = userRepository.findById(event.getUserId()).get();
         dto.setId(event.getId());
         dto.setDescription(event.getDescription());
         dto.setAnnotation(event.getAnnotation());
-        dto.setEventDate(event.getEventDate()/*.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))*/);
+        dto.setEventDate(event.getEventDate());
         dto.setTitle(event.getTitle());
         dto.setPaid(event.getPaid());
         dto.setParticipantLimit(event.getParticipantLimit());
