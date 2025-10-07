@@ -92,8 +92,11 @@ public class ParticipationRequestService {
         return new RequestDetailsDto(savedRequest);
     }
 
-    public List<ParticipationRequest> getRequestsByUser(Long userId) {
-        return requestRepository.findByRequester(userId);
+    public List<RequestDetailsDto> getRequestsByUser(Long userId) {
+        List<ParticipationRequest> requests = requestRepository.findByRequester(userId);
+        return requests.stream()
+                .map(RequestDetailsDto::new)
+                .collect(Collectors.toList());
     }
 
     public List<ParticipationRequestFullDto> getRequestsByUserAndEvent(Long userId, Long eventId) {
@@ -117,11 +120,7 @@ public class ParticipationRequestService {
         List<ParticipationRequest> requests = requestRepository.findAllById(requestIds);
         List<ParticipationRequest> requestedForUpdate = new ArrayList<>();
 
-        // Проверка заявок
         for (ParticipationRequest request : requests) {
-            /*if (!request.getRequester().equals(userId) || !request.getEvent().equals(eventId)) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Заявка не принадлежит пользователю или событию");
-            }*/
             if (!request.getStatus().equals("PENDING")) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Можно изменять только заявки в статусе Ожидается");
             }
@@ -131,7 +130,6 @@ public class ParticipationRequestService {
         List<ParticipationRequest> confirmedRequests = new ArrayList<>();
         List<ParticipationRequest> rejectedRequests = new ArrayList<>();
 
-        // Обработка заявок
         for (ParticipationRequest request : requestedForUpdate) {
             if (newStatus.equalsIgnoreCase("CONFIRMED")) {
                 // Проверка лимита
@@ -169,7 +167,6 @@ public class ParticipationRequestService {
             }
         }
 
-        // Создаем и возвращаем ответ
         UpdateRequestsResponse response = new UpdateRequestsResponse();
 
         response.setConfirmedRequests(
@@ -187,15 +184,4 @@ public class ParticipationRequestService {
         return response;
 
     }
-
-    private ParticipationRequestFullDto toDto(ParticipationRequest request) {
-        ParticipationRequestFullDto dto = new ParticipationRequestFullDto();
-        dto.setCreated(request.getCreated().toString().substring(0, 26));
-        dto.setEvent(request.getEvent());
-        dto.setId(request.getId());
-        dto.setRequester(request.getRequester());
-        dto.setStatus(request.getStatus());
-        return dto;
-    }
-
 }

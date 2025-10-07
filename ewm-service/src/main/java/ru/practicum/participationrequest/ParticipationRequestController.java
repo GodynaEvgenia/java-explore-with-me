@@ -7,7 +7,6 @@ import ru.practicum.exceptions.ErrorResponse;
 import ru.practicum.exceptions.ResourceConflictException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping()
@@ -30,21 +29,10 @@ public class ParticipationRequestController {
             ErrorResponse errorResponse = new ErrorResponse(
                     "CONFLICT",
                     "Incorrectly made request.",
-                    " "
+                    "CONFLICT"
             );
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
-
-    }
-
-    private ParticipationRequestFullDto toDto(ParticipationRequest request) {
-        ParticipationRequestFullDto dto = new ParticipationRequestFullDto();
-        dto.setCreated(request.getCreated().toString());
-        dto.setEvent(request.getEvent());
-        dto.setId(request.getId());
-        dto.setRequester(request.getRequester());
-        dto.setStatus(request.getStatus());
-        return dto;
     }
 
     @PatchMapping("/users/{userId}/requests/{requestId}/cancel")
@@ -55,11 +43,8 @@ public class ParticipationRequestController {
 
 
     @GetMapping("/users/{userId}/requests")
-    public List<ParticipationRequestFullDto> getUserRequests(@PathVariable Long userId) {
-        List<ParticipationRequest> requests = requestService.getRequestsByUser(userId);
-        return requests.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public List<RequestDetailsDto> getUserRequests(@PathVariable Long userId) {
+        return requestService.getRequestsByUser(userId);
     }
 
     @GetMapping("/users/{userId}/events/{eventId}/requests")
@@ -80,9 +65,9 @@ public class ParticipationRequestController {
             return ResponseEntity.ok(request);
         } catch (ResourceConflictException ex) {
             ErrorResponse errorResponse = new ErrorResponse(
-                    "BAD_REQUEST",
-                    "Incorrectly made request.",
-                    "Failed to convert value of type java.lang.String to required type int;"
+                    "CONFLICT",
+                    "Conflict",
+                    "Conflict"
             );
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
