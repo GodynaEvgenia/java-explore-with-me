@@ -48,10 +48,9 @@ public class ParticipationRequestController {
     }
 
     @PatchMapping("/users/{userId}/requests/{requestId}/cancel")
-    public ParticipationRequestFullDto cancelRequest(@PathVariable Long userId,
-                                                     @PathVariable Long requestId) {
-        ParticipationRequest request = requestService.cancelRequest(userId, requestId);
-        return toDto(request);
+    public RequestDetailsDto cancelRequest(@PathVariable Long userId,
+                                           @PathVariable Long requestId) {
+        return requestService.cancelRequest(userId, requestId);
     }
 
 
@@ -78,7 +77,7 @@ public class ParticipationRequestController {
             @RequestBody UpdateRequestDto dto) {
         try {
             UpdateRequestsResponse request = requestService.updateRequestStatus(userId, eventId, dto.getRequestIds(), dto.getStatus());
-            return ResponseEntity.ok(request);//.build();
+            return ResponseEntity.ok(request);
         } catch (ResourceConflictException ex) {
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",

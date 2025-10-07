@@ -79,17 +79,16 @@ public class ParticipationRequestService {
         return new RequestDetailsDto(savedRequest);
     }
 
-    public ParticipationRequest cancelRequest(Long userId, Long requestId) {
+    public RequestDetailsDto cancelRequest(Long userId, Long requestId) {
         ParticipationRequest request = requestRepository.findByIdAndRequester(requestId, userId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Request not found"
                 ));
 
-        // Если заявка уже отменена или подтверждена, можно оставить логику или запретить
-        // Допустим, отменяем любую заявку
         request.setStatus("CANCELED");
-        return requestRepository.save(request);
+        ParticipationRequest savedRequest = requestRepository.save(request);
+        return new RequestDetailsDto(savedRequest);
     }
 
     public List<ParticipationRequest> getRequestsByUser(Long userId) {
@@ -97,7 +96,6 @@ public class ParticipationRequestService {
     }
 
     public List<ParticipationRequestFullDto> getRequestsByUserAndEvent(Long userId, Long eventId) {
-        // Можно расширить, добавив фильтр по userId и eventId
         List<ParticipationRequest> requests = requestRepository.findByRequesterAndEvent(userId, eventId);
         return requests.stream()
                 .map(req -> new ParticipationRequestFullDto(req.getStatus(), req.getEvent(), req.getId(), req.getRequester(), req.getStatus()))
