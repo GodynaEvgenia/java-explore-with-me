@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.events.EventRepository;
 import ru.practicum.exceptions.ResourceConflictException;
 
@@ -41,6 +42,7 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
+    @Transactional
     public Category createCategory(Category category) {
         boolean nameExists = categoryRepository.existsByName(category.getName());
         if (nameExists) {
@@ -49,6 +51,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    @Transactional
     public Optional<Category> updateCategory(Long id, Category updatedCategory) {
         boolean nameExists = categoryRepository.existsByNameAndIdNot(updatedCategory.getName(), id);
         if (nameExists) {
@@ -60,6 +63,7 @@ public class CategoryService {
         });
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         if (eventRepository.existsByCategoryId(id)) {
             throw new ResourceConflictException("На категорию ссылается событие");

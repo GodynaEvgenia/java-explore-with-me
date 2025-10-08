@@ -1,5 +1,6 @@
 package ru.practicum.participationrequest;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,6 +29,7 @@ public class ParticipationRequestService {
         this.eventRepository = eventRepository;
     }
 
+    @Transactional
     public RequestDetailsDto createRequest(Long userId, Long eventId) {
 
         Event event = eventRepository.findById(eventId)
@@ -77,6 +79,7 @@ public class ParticipationRequestService {
         return new RequestDetailsDto(savedRequest);
     }
 
+    @Transactional
     public RequestDetailsDto cancelRequest(Long userId, Long requestId) {
         ParticipationRequest request = requestRepository.findByIdAndRequester(requestId, userId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -103,6 +106,7 @@ public class ParticipationRequestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public UpdateRequestsResponse updateRequestStatus(Long userId, Long eventId, List<Long> requestIds, String newStatus) {
         if (requestIds == null || requestIds.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request IDs обязательны");

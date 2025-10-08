@@ -1,5 +1,6 @@
 package ru.practicum.users;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class UserService {
         return userRepository.findByIdIn(ids, pageable);
     }
 
+    @Transactional
     public User addUser(User user) {
         if (!EmailValidator.isEmailPartLengthValid(user.getEmail())) {
             throw new ResourceConflictException("Email is incorrect");
@@ -40,6 +42,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public boolean deleteUser(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);

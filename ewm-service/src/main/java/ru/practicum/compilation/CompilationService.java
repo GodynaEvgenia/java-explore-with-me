@@ -36,6 +36,7 @@ public class CompilationService {
         this.eventRepository = eventRepository;
     }
 
+    @Transactional
     public CompilationResponseDto createCompilation(CreateCompilationDto dto) {
         Compilation compilation = new Compilation();
         compilation.setTitle(dto.getTitle());
