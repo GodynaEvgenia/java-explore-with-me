@@ -37,7 +37,6 @@ public class StatsService {
         }
     }
 
-    // Entity -> DTO
     public static EndpointHitDto toDto(EndpointHit entity) {
         if (entity == null) {
             return null;
@@ -51,13 +50,12 @@ public class StatsService {
         );
     }
 
-    // DTO -> Entity
     public static EndpointHit toEntity(EndpointHitDto dto) {
         if (dto == null) {
             return null;
         }
         EndpointHit entity = new EndpointHit();
-        entity.setId(dto.getId()); // Обычно id для новых сущностей не устанавливают, будьте аккуратны
+        entity.setId(dto.getId());
         entity.setApp(dto.getApp());
         entity.setUri(dto.getUri());
         entity.setIp(dto.getIp());

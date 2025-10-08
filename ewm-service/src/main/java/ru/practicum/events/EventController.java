@@ -119,10 +119,12 @@ public class EventController {
             @RequestParam(value = "rangeStart", required = false) String rangeStart,
             @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
             @RequestParam(value = "from", defaultValue = "0") Integer from,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            HttpServletRequest request
     ) {
         try {
-
+            statsClient.sendHit(new EndpointHitDto(null, "ewm-service", request.getRequestURI(),
+                    request.getRemoteAddr(), LocalDateTime.now()));
             List<EventFullDto> events = eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
             return ResponseEntity.ok(events);
         } catch (EntityNotFoundException e) {
@@ -140,7 +142,7 @@ public class EventController {
             @PathVariable Long id,
             HttpServletRequest request) {
         try {
-            statsClient.sendHit(new EndpointHitDto(null, "/events", request.getRequestURI(),
+            statsClient.sendHit(new EndpointHitDto(null, "ewm-service", request.getRequestURI(),
                     request.getRemoteAddr(), LocalDateTime.now()));
             EventFullDto eventDetails = eventService.getPublishedEventDetails(id);
             return ResponseEntity.ok(eventDetails);
