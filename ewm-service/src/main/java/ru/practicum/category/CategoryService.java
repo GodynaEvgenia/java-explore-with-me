@@ -23,7 +23,6 @@ public class CategoryService {
         this.eventRepository = eventRepository;
     }
 
-    // Получить все категории
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
@@ -38,12 +37,10 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    // Получить категорию по id
     public Optional<Category> getCategoryById(Long id) {
         return categoryRepository.findById(id);
     }
 
-    // Добавить новую категорию
     public Category createCategory(Category category) {
         boolean nameExists = categoryRepository.existsByName(category.getName());
         if (nameExists) {
@@ -52,7 +49,6 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    // Обновить категорию (по id)
     public Optional<Category> updateCategory(Long id, Category updatedCategory) {
         boolean nameExists = categoryRepository.existsByNameAndIdNot(updatedCategory.getName(), id);
         if (nameExists) {
@@ -64,7 +60,6 @@ public class CategoryService {
         });
     }
 
-    // Удалить категорию по id
     public void deleteCategory(Long id) {
         if (eventRepository.existsByCategoryId(id)) {
             throw new ResourceConflictException("На категорию ссылается событие");

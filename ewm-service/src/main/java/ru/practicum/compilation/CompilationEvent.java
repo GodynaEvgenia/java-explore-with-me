@@ -13,14 +13,9 @@ public class CompilationEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ManyToOne
-    // @JoinColumn(name = "selection_id")
-    // private EventSelection selection;
-
     @ManyToOne
     @JoinColumn(name = "compilation_id")
     private Compilation compilation;
 
-    //private Long compilation_id;
     private Long eventId;
 }

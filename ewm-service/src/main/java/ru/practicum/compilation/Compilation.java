@@ -18,8 +18,4 @@ public class Compilation {
 
     private Boolean pinned;
 
-    // @OneToMany(mappedBy = "selection", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<EventSelectionEvent> eventLinks = new ArrayList<>();
-
-
 }

@@ -19,7 +19,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Получить всех пользователей
     @GetMapping
     public ResponseEntity<List<User>> getUsersByIds(
             @RequestParam(name = "ids", required = false) List<Long> ids,
@@ -28,7 +27,6 @@ public class UserController {
 
         List<User> users;
         if (ids == null || ids.isEmpty()) {
-            // Если ids не переданы, получить всех пользователей с прокруткой
             users = userService.getAllUsers(from, size);
         } else {
             users = userService.getUsersByIds(ids, from, size);
@@ -36,7 +34,6 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    // Добавить пользователя (возвращаем 201 при успешном создании)
     @PostMapping
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         try {
@@ -49,7 +46,6 @@ public class UserController {
         }
     }
 
-    // Удалить пользователя по id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean deleted = userService.deleteUser(id);

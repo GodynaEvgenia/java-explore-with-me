@@ -17,31 +17,31 @@ public class NewEventDto {
 
     @NotBlank
     @Size(min = 20, max = 2000)
-    private String annotation; // Краткое описание события
+    private String annotation;
 
     @NotNull
-    private Long category; // id категории
+    private Long category;
 
     @NotBlank
     @Size(min = 20, max = 7000)
-    private String description; // Полное описание события
+    private String description;
 
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime eventDate; // Дата и время события
+    private LocalDateTime eventDate;
 
     @NotNull
-    private LocationDto location; // Место проведения
+    private LocationDto location;
 
-    private Boolean paid = false; // Нужно ли оплачивать участие
+    private Boolean paid = false;
 
     @Min(0)
-    private Integer participantLimit = 0; // Ограничение на количество участников
+    private Integer participantLimit = 0;
 
-    private Boolean requestModeration = true; // Нужна ли пре-модерация заявок
+    private Boolean requestModeration = true;
 
     @NotBlank
     @Size(min = 3, max = 120)
-    private String title; // Заголовок события
+    private String title;
 
 }

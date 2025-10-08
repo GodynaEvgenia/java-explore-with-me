@@ -9,8 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class UpdateCompilationDto {
-    //@NotNull
-    //@NotBlank
     @Size(max = 50)
     private String title;
     private Boolean pinned;

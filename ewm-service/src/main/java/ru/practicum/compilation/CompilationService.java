@@ -46,13 +46,11 @@ public class CompilationService {
         }
         compilation = compilationRepository.save(compilation);
 
-        // Связываем события, если есть
         if (dto.getEvents() != null && !dto.getEvents().isEmpty()) {
             Compilation finalCompilation = compilation;
             List<CompilationEvent> links = dto.getEvents().stream()
                     .map(eventId -> {
                         CompilationEvent link = new CompilationEvent();
-                        //link.setCompilation_id(finalCompilation.getId());
                         link.setCompilation(finalCompilation);
                         link.setEventId(eventId);
                         compilationEventRepository.save(link);
@@ -61,17 +59,12 @@ public class CompilationService {
 
         }
 
-        // Получаем события для ответа (по их ID)
         List<Event> events = new ArrayList<>();
         if (dto.getEvents() != null && !dto.getEvents().isEmpty()) {
-            // Предполагается, что есть репозиторий Event
             events = eventRepository.findAllById(dto.getEvents());
         }
         return toResponseDto(compilation, events);
     }
-
-    // метод для получения данных о подборке
-
 
     public CompilationResponseDto toResponseDto(Compilation compilation, List<Event> eventList) {
 
@@ -84,9 +77,7 @@ public class CompilationService {
                     dto.setCategory(new CategoryDto(event.getCategoryId(), null));
                     dto.setInitiator(new UserDto(event.getUserId(), null));
                     dto.setPaid(event.getPaid());
-                    dto.setEventDate(event.getEventDate()/*.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))*/);
-                    // dto.(event.getConfirmedRequests());
-                    // dto.setViews(event.getViews());
+                    dto.setEventDate(event.getEventDate());
 
                     return dto;
                 }).collect(Collectors.toList());
@@ -100,12 +91,6 @@ public class CompilationService {
         return responseDto;
     }
 
-    /**
-     * Удаляет подборку событий по её ID.
-     *
-     * @param compilationId ID подборки
-     * @throws EntityNotFoundException если подборка не найдена
-     */
     @Transactional
     public void deleteCompilations(Long compilationId) {
         if (!compilationRepository.existsById(compilationId)) {
@@ -114,9 +99,6 @@ public class CompilationService {
         compilationRepository.deleteById(compilationId);
     }
 
-    /**
-     * Обновление подборки по ID.
-     */
     @Transactional
     public CompilationResponseDto updateSelection(Long id, UpdateCompilationDto dto) {
         Compilation compilation = compilationRepository.findById(id)
@@ -130,7 +112,6 @@ public class CompilationService {
         }
         List<Event> events = new ArrayList<>();
         if (dto.getEvents() != null) {
-            // по списку id пройтись удалить/сохранить события?
             events = eventRepository.findAllById(dto.getEvents());
 
             compilationEventRepository.deleteAllByCompilation_id(compilation.getId());
@@ -159,7 +140,6 @@ public class CompilationService {
             page = compilationRepository.findAll(pageable);
         }
 
-        // return page.getContent();  // Возвращает список, даже если он пустой
         return page.stream().map(compilation -> {
             List<CompilationEvent> cm = compilationEventRepository.findByCompilation_Id(compilation.getId());
             List<Event> events = cm.stream()
@@ -168,16 +148,9 @@ public class CompilationService {
                     }).toList();
             return toResponseDto(compilation, events);
         }).toList();
-        // return toResponseDto(page.getContent(), new ArrayList<>());
+
     }
 
-    /**
-     * Получить подборку по ID.
-     *
-     * @param id ID подборки
-     * @return подборка событий
-     * @throws EntityNotFoundException если подборка не найдена
-     */
     public CompilationResponseDto getCompilationById(Long id) {
 
         Compilation compilation = compilationRepository.findById(id)

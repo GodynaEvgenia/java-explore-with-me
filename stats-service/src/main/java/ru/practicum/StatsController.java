@@ -38,7 +38,7 @@ public class StatsController {
             @RequestParam("start") String start,
             @RequestParam("end") String end,
             @RequestParam(name = "uris", required = false) List<String> uris,
-            @RequestParam(name = "unique", required = false, defaultValue = "false") boolean unique
+            @RequestParam(name = "unique", defaultValue = "false") boolean unique
     ) {
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
         LocalDateTime endDate = LocalDateTime.parse(end, formatter);

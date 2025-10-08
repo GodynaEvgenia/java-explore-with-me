@@ -29,19 +29,17 @@ public class UserService {
         return userRepository.findByIdIn(ids, pageable);
     }
 
-    // Добавить пользователя
     public User addUser(User user) {
         if (!EmailValidator.isEmailPartLengthValid(user.getEmail())) {
             throw new ResourceConflictException("Email is incorrect");
         }
-        // User exUser = userRepository.findByEmail(user.getEmail());
+
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("Пользователь с таким email существует");
         }
         return userRepository.save(user);
     }
 
-    // Удалить пользователя по id
     public boolean deleteUser(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);

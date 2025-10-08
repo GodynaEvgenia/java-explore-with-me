@@ -2,6 +2,7 @@ package ru.practicum;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
@@ -18,6 +19,7 @@ public class StatsService {
         this.repository = repository;
     }
 
+    @Transactional
     public void saveHit(EndpointHitDto hit) {
         EndpointHit h = toEntity(hit);
         repository.save(h);

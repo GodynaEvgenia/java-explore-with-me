@@ -63,7 +63,6 @@ public class EventController {
         }
     }
 
-
     @PatchMapping("/users/{userId}/events/{eventId}")
     public ResponseEntity<?> updateEvent(@PathVariable Long userId,
                                          @PathVariable Long eventId,
@@ -75,7 +74,7 @@ public class EventController {
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",
                     "Incorrectly made request.",
-                    "Failed to convert value of type java.lang.String to required type int;"
+                    "NumberFormatException"
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
@@ -92,7 +91,7 @@ public class EventController {
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",
                     "Incorrectly made request.",
-                    "Failed to convert value of type java.lang.String to required type int;"
+                    "NumberFormatException"
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }

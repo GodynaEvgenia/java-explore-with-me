@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.category.Category;
 import ru.practicum.category.CategoryDto;
@@ -46,10 +47,10 @@ public class EventService {
         this.requestRepository = requestRepository;
     }
 
+    @Transactional
     public EventDto addEvent(Long userId, NewEventDto dto) {
         if (dto.getEventDate() != null) {
             LocalDateTime now = LocalDateTime.now();
-            //LocalDateTime eventDate = LocalDateTime.parse(dto.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             if (dto.getEventDate().isBefore(now)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event date cannot be earlier than two hours from now");
             }
@@ -136,6 +137,7 @@ public class EventService {
         return dto;
     }
 
+    @Transactional
     public EventFullDto updateEvent(Long userId,
                                     Long eventId,
                                     EventUpdateDto updateDto,
@@ -149,7 +151,6 @@ public class EventService {
             event = eventRepository.findByIdAndUserId(eventId, userId)
                     .orElseThrow(() -> new EntityNotFoundException("Event not found"));
         }
-        // Проверка статуса события
 
         Status status = event.getState();
         if (!(status == Status.CANCELED || status == Status.PENDING)) {
@@ -168,7 +169,6 @@ public class EventService {
             event.setEventDate(eventDate);
         }
 
-        // Обновление данных
         if (updateDto.getAnnotation() != null) {
             event.setAnnotation(updateDto.getAnnotation());
         }
@@ -227,7 +227,6 @@ public class EventService {
             rangeEnd = LocalDateTime.parse(rangeEndStr, formatter);
         }
 
-        //поиск категорий
         if (categories != null && !categories.isEmpty()) {
             categories.stream().forEach(c -> {
                 Category category = categoryRepository.findById(c)
@@ -239,35 +238,11 @@ public class EventService {
     }
 
     public EventFullDto getPublishedEventDetails(Long eventId) {
-        // ищем опубликованное событие по id
         Optional<Event> eventOpt = eventRepository.findByIdAndState(eventId, Status.PUBLISHED);
         if (eventOpt.isEmpty()) {
             throw new EntityNotFoundException("Event not found");
         }
         Event event = eventOpt.get();
-
-        // собираем просмотры и подтвержденные запросы
-        //  long views = statisticsService.getEventViews(eventId);
-        //  long confirmedRequests = statisticsService.getConfirmedRequestsCount(eventId);
-
-        // сохраняем факт обращения к статистике
-        //   statisticsService.recordRequest(eventId);
-
-        // возвращаем DTO
-      /*  return new EventFullDto(
-                event.getId(),
-                event.getAnnotation(),
-                event.getDescription(),
-                event.getEventDate(),
-                event.getLocationLat(),
-                event.getLocationLon(),
-                event.getPaid(),
-                event.getParticipantLimit(),
-                event.getTitle(),
-                event.getState(),
-               // views,
-              //  confirmedRequests
-        );*/
         return convertToFullDto(event);
     }
 

@@ -16,7 +16,7 @@ public class CreateCompilationDto {
     @NotBlank
     @NotNull
     @Size(max = 50)
-    private String title;            // Название подборки
-    private Boolean pinned;          // Закрепленная или нет
+    private String title;
+    private Boolean pinned;
     private List<Long> events;
 }

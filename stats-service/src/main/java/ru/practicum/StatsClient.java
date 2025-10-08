@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class StatsClient {
     private final RestTemplate restTemplate;
-    private final String baseUrl; // например, http://localhost:8080, либо адрес вашего сервера
+    private final String baseUrl;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public StatsClient(RestTemplate restTemplate,
@@ -44,7 +44,6 @@ public class StatsClient {
     ) {
         String url = baseUrl + "/stats";
 
-        // Формируем параметры URL с учетом списка uris
         StringBuilder urlWithParams = new StringBuilder(url)
                 .append("?start=").append(start)
                 .append("&end=").append(end)

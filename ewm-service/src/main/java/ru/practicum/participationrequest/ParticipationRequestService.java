@@ -39,25 +39,22 @@ public class ParticipationRequestService {
         if ((long) event.getParticipantLimit() == confirmedCount && event.getParticipantLimit() > 0) {
             throw new ResourceConflictException("Превышен лимит участников");
         }
-        // Проверка, что инициатор не подает заявку на своё событие
+
         if (event.getUserId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Initiator cannot request participation in their own event");
         }
 
-        // Проверка статуса события
         if (!Status.PUBLISHED.equals(event.getState())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Cannot request participation in an unpublished event");
         }
 
-        // Проверка, что заявка ещё не создана
         if (requestRepository.findByEventAndRequester(eventId, userId).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Request already exists");
         }
 
-        // Проверка лимита
         long pendingCount = requestRepository.countByEventAndStatus(eventId, "PENDING");
         if (pendingCount >= MAX_REQUESTS_PER_EVENT) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -132,7 +129,7 @@ public class ParticipationRequestService {
 
         for (ParticipationRequest request : requestedForUpdate) {
             if (newStatus.equalsIgnoreCase("CONFIRMED")) {
-                // Проверка лимита
+
                 if (participantLimit > 0 && moderationRequired) {
                     long confirmedCount = requestRepository.countByEventAndStatus(eventId, "CONFIRMED");
                     if (confirmedCount >= participantLimit) {
@@ -154,7 +151,6 @@ public class ParticipationRequestService {
 
         requestRepository.saveAll(requestedForUpdate);
 
-        // После подтверждения, обработка лимита
         if (newStatus.equalsIgnoreCase("CONFIRMED")) {
             long confirmedCount = requestRepository.countByEventAndStatus(eventId, "CONFIRMED");
             if (participantLimit > 0 && confirmedCount >= participantLimit) {

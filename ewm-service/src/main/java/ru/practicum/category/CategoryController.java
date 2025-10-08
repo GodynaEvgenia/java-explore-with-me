@@ -18,7 +18,6 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // Получить все категории
     @GetMapping("/categories")
     public List<CategoryDto> getCategories(
             @RequestParam(value = "from", defaultValue = "0") int from,
@@ -26,7 +25,6 @@ public class CategoryController {
         return categoryService.getCategories(from, size);
     }
 
-    // Получить категорию по id
     @GetMapping("categories/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id)
@@ -34,7 +32,6 @@ public class CategoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Добавить новую категорию
     @PostMapping("/admin/categories")
     public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category) {
         try {
@@ -45,7 +42,6 @@ public class CategoryController {
         }
     }
 
-    // Обновить категорию по id
     @PatchMapping("/admin/categories/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long id, @Valid @RequestBody Category category) {
         try {
@@ -58,7 +54,6 @@ public class CategoryController {
 
     }
 
-    // Удалить категорию по id
     @DeleteMapping("/admin/categories/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
         try {
