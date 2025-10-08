@@ -1,6 +1,8 @@
 package ru.practicum;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
 import ru.practicum.model.EndpointHit;
@@ -22,6 +24,9 @@ public class StatsService {
     }
 
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        if (start.isAfter(end)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Дата начала не может быть позже даты окончания");
+        }
         if (unique) {
             if (uris == null || uris.isEmpty()) {
                 return repository.findUniqueStatsWithoutUris(start, end);

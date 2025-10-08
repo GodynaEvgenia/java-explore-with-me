@@ -2,6 +2,7 @@ package ru.practicum;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
 
@@ -23,7 +24,10 @@ public class StatsController {
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public void hit(@RequestBody EndpointHitDto hit) {
-        statsService.saveHit(hit);
+        try {
+            statsService.saveHit(hit);
+        } catch (ResponseStatusException e) {
+        }
     }
 
     @GetMapping("/stats")
