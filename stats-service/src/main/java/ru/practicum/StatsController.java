@@ -1,11 +1,11 @@
 package ru.practicum;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
-import ru.practicum.exceptions.ErrorResponse;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,15 +24,12 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void hit(@RequestBody EndpointHitDto hit) {
+    public ResponseEntity<Void> hit(@RequestBody EndpointHitDto hit) {
         try {
             statsService.saveHit(hit);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ResponseStatusException e) {
-            ErrorResponse errorResponse = new ErrorResponse(
-                    "BAD_REQUEST",
-                    "Incorrectly made request.",
-                    "ResponseStatusException"
-            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
