@@ -38,8 +38,6 @@ public class EventController {
             @Valid @RequestBody NewEventDto eventDto) {
         EventDto createdEvent = eventService.addEvent(userId, eventDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
-
-
     }
 
     @GetMapping("/users/{userId}/events")
@@ -48,7 +46,6 @@ public class EventController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
-        log.info("/users/{userId}/events");
         statsClient.sendHit(new EndpointHitDto(null, "/users/{userId}/events", request.getRequestURI(),
                 request.getRemoteAddr(), LocalDateTime.now()));
         return eventService.getEventsByUser(userId, from, size);
@@ -125,28 +122,33 @@ public class EventController {
             @RequestParam(value = "size", defaultValue = "10") Integer size
     ) {
         try {
+
             List<EventFullDto> events = eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
             return ResponseEntity.ok(events);
         } catch (EntityNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",
                     "Incorrectly made request.",
-                    "Failed to convert value of type java.lang.String to required type int;"
+                    "EntityNotFoundException"
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<?> getEventById(@PathVariable Long id) {
+    public ResponseEntity<?> getEventById(
+            @PathVariable Long id,
+            HttpServletRequest request) {
         try {
+            statsClient.sendHit(new EndpointHitDto(null, "/events", request.getRequestURI(),
+                    request.getRemoteAddr(), LocalDateTime.now()));
             EventFullDto eventDetails = eventService.getPublishedEventDetails(id);
             return ResponseEntity.ok(eventDetails);
         } catch (EntityNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
                     "BAD_REQUEST",
                     "Incorrectly made request.",
-                    "Failed to convert value of type java.lang.String to required type int;"
+                    "EntityNotFoundException"
             );
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }

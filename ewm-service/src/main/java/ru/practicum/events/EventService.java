@@ -151,7 +151,7 @@ public class EventService {
         }
         // Проверка статуса события
 
-        Status status = event.getState(); // предполагается enum
+        Status status = event.getState();
         if (!(status == Status.CANCELED || status == Status.PENDING)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Only cancellations or pending events can be modified");
         }
@@ -159,16 +159,14 @@ public class EventService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Only pending events can be modified");
         }
 
-        // Проверка даты
         if (updateDto.getEventDate() != null) {
             LocalDateTime nowPlusTwoHours = LocalDateTime.now().plusHours(2);
             LocalDateTime eventDate = LocalDateTime.parse(updateDto.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             if (eventDate.isBefore(nowPlusTwoHours)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event date cannot be earlier than two hours from now");
             }
-            event.setEventDate(eventDate);//?????????
+            event.setEventDate(eventDate);
         }
-
 
         // Обновление данных
         if (updateDto.getAnnotation() != null) {
