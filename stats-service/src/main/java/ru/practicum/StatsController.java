@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
+import ru.practicum.exceptions.ErrorResponse;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,11 @@ public class StatsController {
         try {
             statsService.saveHit(hit);
         } catch (ResponseStatusException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "BAD_REQUEST",
+                    "Incorrectly made request.",
+                    "ResponseStatusException"
+            );
         }
     }
 
