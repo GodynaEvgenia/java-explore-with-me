@@ -54,9 +54,11 @@ public class CompilationService {
                         CompilationEvent link = new CompilationEvent();
                         link.setCompilation(finalCompilation);
                         link.setEventId(eventId);
-                        compilationEventRepository.save(link);
                         return link;
-                    }).collect(Collectors.toList());
+                    })
+                    .collect(Collectors.toList());
+
+            compilationEventRepository.saveAll(links);
 
         }
 
