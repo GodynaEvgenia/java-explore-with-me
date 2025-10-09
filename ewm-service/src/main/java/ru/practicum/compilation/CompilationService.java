@@ -16,6 +16,7 @@ import ru.practicum.users.UserDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -118,12 +119,16 @@ public class CompilationService {
             events = eventRepository.findAllById(dto.getEvents());
 
             compilationEventRepository.deleteAllByCompilation_id(compilation.getId());
-            dto.getEvents().stream().forEach(e -> {
-                CompilationEvent ce = new CompilationEvent();
-                ce.setCompilation(compilation);
-                ce.setEventId(e);
-                compilationEventRepository.save(ce);
-            });
+            List<CompilationEvent> cevents = dto.getEvents().stream()
+                    .map(e -> {
+                        CompilationEvent ce = new CompilationEvent();
+                        ce.setCompilation(compilation);
+                        ce.setEventId(e);
+                        return ce;
+                    })
+                    .collect(Collectors.toList());
+
+            compilationEventRepository.saveAll(cevents);
         }
         Compilation updatedCompilation = compilationRepository.save(compilation);
 
@@ -145,10 +150,12 @@ public class CompilationService {
 
         return page.stream().map(compilation -> {
             List<CompilationEvent> cm = compilationEventRepository.findByCompilation_Id(compilation.getId());
-            List<Event> events = cm.stream()
-                    .map(c -> {
-                        return eventRepository.findById(c.getEventId()).get();
-                    }).toList();
+            // Собираем все уникальные ID из коллекции
+            Set<Long> eventIds = cm.stream()
+                    .map(c -> c.getEventId())
+                    .collect(Collectors.toSet());
+
+            List<Event> events = eventRepository.findAllById(eventIds);
             return toResponseDto(compilation, events);
         }).toList();
 
