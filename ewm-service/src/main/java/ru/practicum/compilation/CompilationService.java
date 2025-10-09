@@ -150,7 +150,6 @@ public class CompilationService {
 
         return page.stream().map(compilation -> {
             List<CompilationEvent> cm = compilationEventRepository.findByCompilation_Id(compilation.getId());
-            // Собираем все уникальные ID из коллекции
             Set<Long> eventIds = cm.stream()
                     .map(c -> c.getEventId())
                     .collect(Collectors.toSet());
@@ -167,10 +166,12 @@ public class CompilationService {
                 .orElseThrow(() -> new EntityNotFoundException("Подборка с ID " + id + " не найдена"));
 
         List<CompilationEvent> ce = compilationEventRepository.findByCompilation_Id(compilation.getId());
-        List<Event> events = ce.stream()
-                .map(c -> {
-                    return eventRepository.findById(c.getEventId()).get();
-                }).collect(Collectors.toList());
+
+        Set<Long> eventIds = ce.stream()
+                .map(c -> c.getEventId())
+                .collect(Collectors.toSet());
+
+        List<Event> events = eventRepository.findAllById(eventIds);
         return toResponseDto(compilation, events);
     }
 }
