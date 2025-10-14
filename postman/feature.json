@@ -23,12 +23,11 @@
 							"        const user = await api.addUser(rnd.getUser());",
 							"        pm.collectionVariables.set(\"uid\", user.id)",
 							"        const category = await api.addCategory(rnd.getCategory());",
-							"        //event = rnd.getEvent(category.id);",
 							"",
 							"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));",
 							"        event = await api.publishEvent(event.id);",
-							"        pm.collectionVariables.set('uid', user.id);",
 							"        pm.collectionVariables.set('eid', event.id);",
+							"        pm.collectionVariables.set('baseUrl', 'http://localhost:8080');",
 							"",
 							"        //pm.collectionVariables.set('response', event);",
 							"    } catch(err) {",
@@ -327,10 +326,6 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": ""
-		},
-		{
-			"key": "uri",
 			"value": ""
 		},
 		{
