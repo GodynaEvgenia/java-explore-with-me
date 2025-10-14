@@ -38,7 +38,6 @@ public class CommentController {
         return comments;
     }
 
-    // Модерировать комментарий (утвердить/отклонить)
     @PostMapping("/moderation/{commentId}")
     public ResponseEntity<CommentDto> moderateComment(@PathVariable Long commentId,
                                                       @RequestParam boolean approve) {
