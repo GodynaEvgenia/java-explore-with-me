@@ -31,7 +31,6 @@ public class CommentController {
         return comments;//comments.stream().map(this::commentService.toDto).collect(Collectors.toList());
     }
 
-    // Получить комментарии для модерации
     @GetMapping("/moderation")
     public List<CommentDto> getCommentsForModeration() {
         List<CommentDto> comments = commentService.getCommentsForModeration();
