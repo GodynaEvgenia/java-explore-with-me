@@ -24,11 +24,11 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.toDto(saved));
     }
 
-    // Получить одобренные комментарии к событию
-    @GetMapping("/event/{eventId}")
+
+    @GetMapping("/event/{eventId}/comments")
     public List<CommentDto> getApprovedComments(@PathVariable Long eventId) {
         List<CommentDto> comments = commentService.getApprovedCommentsForEvent(eventId);
-        return comments;//comments.stream().map(this::commentService.toDto).collect(Collectors.toList());
+        return comments;
     }
 
     @GetMapping("/moderation")
@@ -37,7 +37,7 @@ public class CommentController {
         return comments;
     }
 
-    @PostMapping("/moderation/{commentId}")
+    @PostMapping("/admin/comments/{commentId}")
     public ResponseEntity<CommentDto> moderateComment(@PathVariable Long commentId,
                                                       @RequestParam boolean approve) {
         return ResponseEntity.ok(commentService.moderateComment(commentId, approve));

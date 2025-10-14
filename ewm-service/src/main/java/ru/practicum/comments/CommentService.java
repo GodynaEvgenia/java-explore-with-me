@@ -36,7 +36,7 @@ public class CommentService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));
         //return commentRepository.findAllByEventAndStatus(event, Status.PUBLISHED);
-        List<Comment> comments = commentRepository.findAllByEventIdAndStatus(event, Status.PUBLISHED);
+        List<Comment> comments = commentRepository.findAllByEventIdAndStatus(event.getId(), Status.PUBLISHED);
         return comments.stream().map(this::toDto).collect(Collectors.toList());
     }
 

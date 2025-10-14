@@ -124,6 +124,98 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Получение комментариев к событию",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {",
+							"    const api = new API(pm);",
+							"    const rnd = new RandomUtils();",
+							"",
+							"    let event;",
+							"    try {",
+							"        const user = await api.addUser(rnd.getUser());",
+							"        pm.collectionVariables.set(\"uid\", user.id)",
+							"        const category = await api.addCategory(rnd.getCategory());",
+							"",
+							"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));",
+							"        event = await api.publishEvent(event.id);",
+							"        pm.collectionVariables.set('eid', event.id);",
+							"        pm.collectionVariables.set('baseUrl', 'http://localhost:8080');",
+							"        let comment = await api.addComment(user.id, event.id);",
+							"        const requestToPulish = await api.publishComment(comment.id);",
+							"        //pm.collectionVariables.set('cid', event.id);",
+							"",
+							"    } catch(err) {",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);",
+							"    }",
+							"",
+							"    pm.request.body.update({",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify(),",
+							"        options: { raw: { language: 'json' } }",
+							"    });",
+							"};",
+							"",
+							"const interval = setInterval(() => {}, 1000);",
+							"",
+							"setTimeout(async () => ",
+							"    {",
+							"        try {",
+							"            await main();",
+							"        } catch (e) {",
+							"            console.error(e);",
+							"        } finally {",
+							"            clearInterval(interval);",
+							"        }",
+							"    },  ",
+							"    100 ",
+							");"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/event/:eventId/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"event",
+						":eventId",
+						"comments"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eid}}"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -187,6 +279,14 @@
 					"",
 					"    async findUser(userId, verbose=null) {",
 					"        return this.get('/admin/users?ids=' + userId, null, \"Ошибка при поиске пользователя по id\", verbose);",
+					"    }",
+					"",
+					"    async addComment(userId, eventId, verbose=null) {",
+					"        return this.post('/event/'+ eventId +'/comments/'+ userId, {text: \"comment\"}, \"Ошибка при добавлении нового комментария: \", verbose);",
+					"    }",
+					"",
+					"    async publishComment(commentId, verbose=null) {",
+					"        return this.post('/admin/comments/'+ commentId+'?approve=true', null, \"Ошибка при публикации комментария: \", verbose);",
 					"    }",
 					"",
 					"    async post(path, body, errorText = \"Ошибка при выполнении post-запроса: \", verbose=null) {",
